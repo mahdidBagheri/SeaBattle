@@ -10,7 +10,7 @@ import java.io.IOException;
 public class MainFrameView extends JFrame {
     private static MainFrameView instance = null;
 
-    private MainPanel mainPanel = new MainPanel();
+    private MainPanel mainPanel;
 
     public MainFrameView() throws IOException {
         FrameConfig frameConfig = new FrameConfig();
@@ -32,6 +32,8 @@ public class MainFrameView extends JFrame {
                 }
             }
         };
+
+        mainPanel = new MainPanel();
 
         mainPanel.setMainFrameListener(mainFrameListener);
         this.add(mainPanel);

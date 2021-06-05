@@ -1,4 +1,4 @@
-frameConfigPath=src\main\resources\Config\FrameConfig\FrameConfig
-collorConfigPath=src\main\resources\Config\CollorConfig\CollorConfig
-fontConfigPath=src\main\resources\Config\FontConfig\FontConfig
-netWorkConfigPath=src\main\resources\Config\NetWorkConfig\NetWorkConfig
+frameConfigPath=..\\SeaBattle\\Client\\src\\main\\resources\\Config\\FrameConfig\\FrameConfig
+colorConfigPath=..\\SeaBattle\\Client\\src\\main\\resources\\Config\\CollorConfig\\CollorConfig
+fontConfigPath=..\\SeaBattle\\Client\\src\\main\\resources\\Config\\FontConfig\\FontConfig
+netWorkConfigPath=..\\SeaBattle\\Client\\src\\main\\resources\\Config\\NetWorkConfig\\NetWorkConfig
