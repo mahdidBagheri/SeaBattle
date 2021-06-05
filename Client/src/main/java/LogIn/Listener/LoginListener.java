@@ -1,5 +1,6 @@
 package LogIn.Listener;
 
+import LogIn.LoginEvent.LoginEvent;
 import MainFrame.View.MainPanel;
 
 public class LoginListener {
@@ -7,6 +8,10 @@ public class LoginListener {
 
     public LoginListener(MainPanel mainPanel) {
         this.mainPanel = mainPanel;
+    }
+
+    public void listen(LoginEvent loginEvent){
+
     }
 
 }
