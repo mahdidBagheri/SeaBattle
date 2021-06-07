@@ -4,7 +4,6 @@ import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
 import LogIn.Listener.LoginListener;
 import LogIn.LoginEvent.LoginEvent;
-import Signup.Listener.SignupListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

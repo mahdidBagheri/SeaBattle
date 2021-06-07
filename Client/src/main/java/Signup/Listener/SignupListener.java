@@ -1,5 +1,6 @@
 package Signup.Listener;
 
+import Connection.Exceptions.CouldNotConnectToServerException;
 import MainFrame.View.MainPanel;
 import Signup.Controller.SignupController;
 import Signup.Events.SignupEvent;
@@ -17,7 +18,7 @@ public class SignupListener {
         this.mainPanel = mainPanel;
     }
 
-    public void listen(SignupEvent signupEvent) throws PasswordsNotMatchException, UserNameStartsWithDigitException, UsernameExistsException, IOException, EmailExistException {
+    public void listen(SignupEvent signupEvent) throws PasswordsNotMatchException, UserNameStartsWithDigitException, UsernameExistsException, IOException, EmailExistException, ClassNotFoundException, CouldNotConnectToServerException {
         SignupController signupController = new SignupController();
 
         signupController.signupValidation(signupEvent);

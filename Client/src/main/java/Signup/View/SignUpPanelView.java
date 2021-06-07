@@ -2,6 +2,7 @@ package Signup.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Connection.Exceptions.CouldNotConnectToServerException;
 import Signup.Events.SignupEvent;
 import Signup.Exceptions.EmailExistException;
 import Signup.Exceptions.PasswordsNotMatchException;
@@ -10,7 +11,6 @@ import Signup.Exceptions.UsernameExistsException;
 import Signup.Listener.SignupListener;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -130,6 +130,10 @@ public class SignUpPanelView extends JPanel implements ActionListener {
                 ioException.printStackTrace();
             } catch (EmailExistException emailExistException) {
                 emailExistException.printStackTrace();
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                couldNotConnectToServerException.printStackTrace();
             }
         }
     }

@@ -5,11 +5,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class Connection {
+public class ServerConnection {
     private Socket socket;
     private ConnectionToDataBase connectionToDataBase;
 
-    public Connection(Socket socket){
+    public ServerConnection(Socket socket){
         this.socket = socket;
         this.connectionToDataBase = new ConnectionToDataBase();
     }
