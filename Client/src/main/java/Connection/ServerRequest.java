@@ -1,6 +1,8 @@
 package Connection;
 
-public class ServerRequest {
+import java.io.Serializable;
+
+public class ServerRequest implements Serializable {
     private String userName;
     private String command;
 

@@ -1,4 +1,5 @@
 import Connection.ClientThread;
+import Interfaces.Constants;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,7 +11,7 @@ public class ServerMain {
 
         while (true) {
             try {
-                serverSocket = new ServerSocket(9000);
+                serverSocket = new ServerSocket(Constants.portNumber);
                 System.out.println("waiting for client ...");
                 Socket socket = serverSocket.accept();
                 System.out.println("client connected");

@@ -26,6 +26,11 @@ public class ServerConnection {
         OutputStream os = socket.getOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeObject(serverRequest);
+        oos.flush();
+        os.flush();
+
+
+
 
     }
 }
