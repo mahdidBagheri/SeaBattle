@@ -3,6 +3,10 @@ package Signup.View;
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
 import Signup.Events.SignupEvent;
+import Signup.Exceptions.EmailExistException;
+import Signup.Exceptions.PasswordsNotMatchException;
+import Signup.Exceptions.UserNameStartsWithDigitException;
+import Signup.Exceptions.UsernameExistsException;
 import Signup.Listener.SignupListener;
 
 import javax.swing.*;
@@ -103,13 +107,30 @@ public class SignUpPanelView extends JPanel implements ActionListener {
 
 
     public void setSignupListener(SignupListener signupListener) {
+        this.signupListener = signupListener;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == singUpBotton){
-            SignupEvent signupEvent = new SignupEvent();
-            signupListener.listen(signupEvent);
+            try {
+                SignupEvent signupEvent = new SignupEvent(userNameText.getText(),
+                        password1Text.getText(),
+                        password2Text.getText(),
+                        emailText.getText());
+
+                signupListener.listen(signupEvent);
+            } catch (PasswordsNotMatchException passwordsNotMatchException) {
+                passwordsNotMatchException.printStackTrace();
+            } catch (UserNameStartsWithDigitException userNameStartsWithDigitException) {
+                userNameStartsWithDigitException.printStackTrace();
+            } catch (UsernameExistsException usernameExistsException) {
+                usernameExistsException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (EmailExistException emailExistException) {
+                emailExistException.printStackTrace();
+            }
         }
     }
 }

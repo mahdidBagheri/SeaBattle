@@ -3,8 +3,12 @@ package Signup.Listener;
 import MainFrame.View.MainPanel;
 import Signup.Controller.SignupController;
 import Signup.Events.SignupEvent;
+import Signup.Exceptions.EmailExistException;
 import Signup.Exceptions.PasswordsNotMatchException;
 import Signup.Exceptions.UserNameStartsWithDigitException;
+import Signup.Exceptions.UsernameExistsException;
+
+import java.io.IOException;
 
 public class SignupListener {
     MainPanel mainPanel;
@@ -13,7 +17,7 @@ public class SignupListener {
         this.mainPanel = mainPanel;
     }
 
-    public void listen(SignupEvent signupEvent) throws PasswordsNotMatchException, UserNameStartsWithDigitException {
+    public void listen(SignupEvent signupEvent) throws PasswordsNotMatchException, UserNameStartsWithDigitException, UsernameExistsException, IOException, EmailExistException {
         SignupController signupController = new SignupController();
 
         signupController.signupValidation(signupEvent);

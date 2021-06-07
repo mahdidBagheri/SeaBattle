@@ -1,38 +1,38 @@
 package Connection;
 
-import Signup.Controller.SignupController;
 import Signup.Listener.SignupListener;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.Scanner;
+import java.sql.SQLException;
 
 public class ClientThread extends Thread {
-    private Socket socket;
+    private Connection connection;
     private String serializedRequestObject;
 
     public ClientThread(Socket socket) {
-        this.socket = socket;
+        this.connection = new Connection(socket);
     }
 
     @Override
     public void run(){
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream objectInputStream = new ObjectInputStream(connection.getSocket().getInputStream());
             ClientRequest clientRequest = (ClientRequest) objectInputStream.readObject();
             objectInputStream.close();
 
             if(clientRequest.getSource().equals("signup")){
-                SignupListener signupListener = new SignupListener(socket);
+                SignupListener signupListener = new SignupListener(connection);
                 signupListener.listen(clientRequest);
-
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
     }
