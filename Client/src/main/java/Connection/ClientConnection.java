@@ -36,8 +36,12 @@ public class ClientConnection {
     }
 
 
-    public void execute(ClientRequest clientRequest) {
-
+    public void execute(ClientRequest clientRequest) throws IOException {
+        OutputStream os = socket.getOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeObject(clientRequest);
+        os.flush();
+        oos.flush();
     }
 
 }

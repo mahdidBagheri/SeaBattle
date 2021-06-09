@@ -18,7 +18,7 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        while (serverConnection.getSocket().isConnected()) {
+        while (!serverConnection.getSocket().isClosed()) {
             try {
                 ServerWaitForInput.waitForInput(serverConnection.getSocket());
                 ObjectInputStream objectInputStream = new ObjectInputStream(serverConnection.getSocket().getInputStream());
@@ -30,15 +30,40 @@ public class ClientThread extends Thread {
                 }
 
             } catch (IOException e) {
+                try {
+                    serverConnection.getSocket().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                try {
+                    serverConnection.getSocket().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 e.printStackTrace();
             } catch (SQLException throwables) {
+                try {
+                    serverConnection.getSocket().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 throwables.printStackTrace();
             } catch (CouldNotConnectToServerException e) {
+                try {
+                    serverConnection.getSocket().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 e.printStackTrace();
             }
 
+        }
+        try {
+            serverConnection.getSocket().close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
     }
 

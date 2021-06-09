@@ -19,8 +19,13 @@ public class ClientWaitForInput {
             if (System.currentTimeMillis() - start > 10e8) {
                 throw new CouldNotConnectToServerException(" could not connect to server");
             }
-            if (socket.getInputStream().available() == 0) {
-                continue;
+            try {
+                if (socket.getInputStream().available() == 0) {
+                    continue;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
             }
             int a = 0;
             break;
