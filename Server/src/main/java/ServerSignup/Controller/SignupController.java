@@ -3,6 +3,7 @@ package ServerSignup.Controller;
 import Connection.ServerConnection;
 import DataBaseUtils.DataBaseUtils;
 import User.Model.User;
+import Utils.DateTime;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +29,7 @@ public class SignupController {
         if (!DataBaseUtils.isEmptyTable("UsersTable")) {
             if (rs != null) {
                 while (rs.next()) {
-                    if (rs.getString(0).equals(email)) {
+                    if (rs.getString(1).equals(email)) {
                         return true;
                     }
                 }
@@ -48,7 +49,7 @@ public class SignupController {
         if (!DataBaseUtils.isEmptyTable("UsersTable")) {
             if (rs != null) {
                 while (rs.next()) {
-                    if (rs.getString(0).equals(userName)) {
+                    if (rs.getString(1).equals(userName)) {
                         return true;
                     }
                 }
@@ -58,10 +59,13 @@ public class SignupController {
     }
 
     public void signupUser(User user) throws SQLException {
-        String sql = String.format("insert into \"UsersTable\" (\"UserUUID\",\"UserName\",\"Password\",\"Email\") values (uuid_generate_v4(),'%s','%s','%s');",
+        DateTime dateTime = new DateTime();
+        String now = dateTime.Now();
+        String sql = String.format("insert into \"UsersTable\" (\"UserUUID\",\"UserName\",\"Password\",\"Email\",\"DateJoined\") values (uuid_generate_v4(),'%s','%s','%s','%s');",
                 user.getUsername(),
                 user.getPassword(),
-                user.getPassword());
+                user.getPassword(),
+                now);
 
         serverConnection.getConnectionToDataBase().executeUpdate(sql);
         int a = 0;
