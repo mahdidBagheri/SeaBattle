@@ -1,13 +1,13 @@
-package Connection;
+package Connection.Utils;
 
 import Connection.Exceptions.CouldNotConnectToServerException;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientWaitForInput {
+public class ServerWaitForInput {
 
-    public static void waitForInput(Socket socket) throws CouldNotConnectToServerException, IOException {
+    public static void waitForInput(Socket socket) throws CouldNotConnectToServerException {
 
         long start = System.currentTimeMillis();
         while (true) {
@@ -27,7 +27,6 @@ public class ClientWaitForInput {
                 e.printStackTrace();
                 break;
             }
-            int a = 0;
             break;
 
         }

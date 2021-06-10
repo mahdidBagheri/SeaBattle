@@ -1,4 +1,4 @@
-package Connection;
+package Connection.DataCaseConnection;
 
 import java.sql.*;
 import java.sql.Connection;

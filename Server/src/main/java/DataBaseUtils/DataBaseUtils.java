@@ -1,6 +1,6 @@
 package DataBaseUtils;
 
-import Connection.ConnectionToDataBase;
+import Connection.DataCaseConnection.ConnectionToDataBase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

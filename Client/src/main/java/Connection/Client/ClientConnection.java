@@ -1,6 +1,8 @@
-package Connection;
+package Connection.Client;
 
+import Connection.Utils.ClientWaitForInput;
 import Connection.Exceptions.CouldNotConnectToServerException;
+import Connection.Server.ServerRequest;
 import Interfaces.Constants;
 
 import java.io.*;

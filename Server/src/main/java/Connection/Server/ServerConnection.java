@@ -1,4 +1,6 @@
-package Connection;
+package Connection.Server;
+
+import Connection.DataCaseConnection.ConnectionToDataBase;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

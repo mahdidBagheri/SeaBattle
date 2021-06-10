@@ -1,4 +1,4 @@
-import Connection.ClientThread;
+import Connection.Client.ClientThread;
 import Interfaces.Constants;
 
 import java.io.IOException;

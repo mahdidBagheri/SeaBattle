@@ -2,6 +2,9 @@ package LogIn.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Connection.Exceptions.CouldNotConnectToServerException;
+import LogIn.Exceptions.EmptyFieldException;
+import LogIn.Exceptions.UsernameAndPasswordDoesNotMatch;
 import LogIn.Listener.LoginListener;
 import LogIn.LoginEvent.LoginEvent;
 
@@ -79,8 +82,20 @@ public class LoginPanelView extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == loginBotton){
-            LoginEvent loginEvent = new LoginEvent();
-            loginListener.listen(loginEvent);
+            LoginEvent loginEvent = new LoginEvent(userNameText.getText(), passwordText.getText());
+            try {
+                loginListener.listen(loginEvent);
+            } catch (EmptyFieldException emptyFieldException) {
+                emptyFieldException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                couldNotConnectToServerException.printStackTrace();
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            } catch (UsernameAndPasswordDoesNotMatch usernameAndPasswordDoesNotMatch) {
+                usernameAndPasswordDoesNotMatch.printStackTrace();
+            }
         }
     }
 }

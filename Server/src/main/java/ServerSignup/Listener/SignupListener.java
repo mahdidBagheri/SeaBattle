@@ -1,8 +1,8 @@
 package ServerSignup.Listener;
 
-import Connection.ClientRequest;
-import Connection.ServerConnection;
-import Connection.ServerRequest;
+import Connection.Client.ClientRequest;
+import Connection.Server.ServerConnection;
+import Connection.Server.ServerRequest;
 import ServerSignup.Controller.SignupController;
 import User.Model.User;
 
@@ -20,21 +20,20 @@ public class SignupListener {
         SignupController signupController = new SignupController(serverConnection);
 
         if(clientRequest.getCommand().equals("validate email")){
-            boolean isValidEmail = signupController.validateEmail(clientRequest.getPayLoad());
-            ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(), Boolean.toString(isValidEmail));
+            boolean isValidEmail = signupController.validateEmail(clientRequest.getClientPayLoad().getStringStringHashMap().get("email"));
+            ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(), Boolean.toString(isValidEmail),null);
             serverConnection.execute(serverRequest);
         }
         else if(clientRequest.getCommand().equals("validate username")){
-            boolean isValidUserName = signupController.validateUserName(clientRequest.getPayLoad());
-            ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(), Boolean.toString(isValidUserName));
+            boolean isValidUserName = signupController.validateUserName(clientRequest.getClientPayLoad().getStringStringHashMap().get("username"));
+            ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(), Boolean.toString(isValidUserName), null);
             serverConnection.execute(serverRequest);
         }
         else if(clientRequest.getCommand().equals("signup")){
             User user = new User();
             user.setUsername(clientRequest.getUsername());
             user.setPassword(clientRequest.getPassword());
-            user.setEmail(clientRequest.getPayLoad());
-
+            user.setEmail(clientRequest.getClientPayLoad().getStringStringHashMap().get("email"));
             signupController.signupUser(user);
         }
     }

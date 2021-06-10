@@ -1,18 +1,18 @@
-package Connection;
+package Connection.Client;
 
 import java.io.Serializable;
 
 public class ClientRequest implements Serializable {
     private String source;
-    private String payLoad;
+    private ClientPayLoad clientPayLoad;
     private String session;
     private String command;
     private String username;
     private String password;
 
-    public ClientRequest(String source, String payLoad, String session, String command, String username, String password ) {
+    public ClientRequest(String source, ClientPayLoad clientPayLoad, String session, String command, String username, String password ) {
         this.source = source;
-        this.payLoad = payLoad;
+        this.clientPayLoad = clientPayLoad;
         this.session = session;
         this.command = command;
         this.username = username;
@@ -23,8 +23,8 @@ public class ClientRequest implements Serializable {
         return source;
     }
 
-    public String getPayLoad() {
-        return payLoad;
+    public ClientPayLoad getClientPayLoad() {
+        return clientPayLoad;
     }
 
     public String getSession() {

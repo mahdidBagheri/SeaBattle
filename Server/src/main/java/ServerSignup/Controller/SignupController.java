@@ -1,6 +1,6 @@
 package ServerSignup.Controller;
 
-import Connection.ServerConnection;
+import Connection.Server.ServerConnection;
 import DataBaseUtils.DataBaseUtils;
 import User.Model.User;
 import Utils.DateTime;

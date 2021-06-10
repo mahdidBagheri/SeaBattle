@@ -1,6 +1,9 @@
-package Connection;
+package Connection.Client;
 
 import Connection.Exceptions.CouldNotConnectToServerException;
+import Connection.Server.ServerConnection;
+import Connection.Utils.ServerWaitForInput;
+import ServerLogin.Listener.ServerLoginListener;
 import ServerSignup.Listener.SignupListener;
 
 import java.io.IOException;
@@ -10,7 +13,6 @@ import java.sql.SQLException;
 
 public class ClientThread extends Thread {
     private ServerConnection serverConnection;
-    private String serializedRequestObject;
 
     public ClientThread(Socket socket) {
         this.serverConnection = new ServerConnection(socket);
@@ -27,6 +29,11 @@ public class ClientThread extends Thread {
                 if (clientRequest.getSource().equals("signup")) {
                     SignupListener signupListener = new SignupListener(serverConnection);
                     signupListener.listen(clientRequest);
+                }
+
+                else if(clientRequest.getSource().equals("login")){
+                    ServerLoginListener serverLoginListener = new ServerLoginListener(serverConnection);
+                    serverLoginListener.listen(clientRequest);
                 }
 
             } catch (IOException e) {
