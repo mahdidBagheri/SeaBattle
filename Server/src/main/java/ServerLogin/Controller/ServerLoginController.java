@@ -16,7 +16,7 @@ public class ServerLoginController {
     }
 
     public void matchUsernameAndPassword(ClientRequest clientRequest) throws SQLException, IOException {
-        String sql = String.format("select * from \"UsersTable\" where \"UserName\" = '%s' and \"Pasword\" = '%s';",
+        String sql = String.format("select * from \"UsersTable\" where \"UserName\" = '%s' and \"Password\" = '%s';",
                 clientRequest.getUsername(),
                 clientRequest.getPassword());
 
