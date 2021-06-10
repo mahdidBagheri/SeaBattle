@@ -2,9 +2,11 @@ package ServerLogin.Controller;
 
 import Connection.Client.ClientRequest;
 import Connection.Server.ServerConnection;
+import Connection.Server.ServerPayLoad;
 import Connection.Server.ServerRequest;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -38,7 +40,24 @@ public class ServerLoginController {
         }
     }
 
-    public void login() {
+    public void login(ClientRequest clientRequest) throws SQLException, IOException {
+        ServerPayLoad serverPayLoad = new ServerPayLoad();
+        String session = createLoginSession();
+        putSessionIntoDataBase(session,clientRequest.getUsername());
+        serverPayLoad.getStringStringHashMap().put("session",session);
 
+        ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(),"setLoginSession",serverPayLoad);
+        serverConnection.execute(serverRequest);
+    }
+
+    public String createLoginSession(){
+        SecureRandom secureRandom = new SecureRandom();
+        int rnd = secureRandom.nextInt(1000);
+        return String.valueOf(rnd);
+    }
+
+    public void putSessionIntoDataBase(String session, String userName) throws SQLException {
+        String sql = String.format("update \"UsersTable\" set \"Session\" = '%s' where \"UserName\" = '%s';",session,userName);
+        serverConnection.getConnectionToDataBase().executeUpdate(sql);
     }
 }

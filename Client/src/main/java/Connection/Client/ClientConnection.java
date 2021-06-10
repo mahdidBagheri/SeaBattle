@@ -46,4 +46,7 @@ public class ClientConnection {
         oos.flush();
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
 }

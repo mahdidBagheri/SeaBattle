@@ -30,6 +30,7 @@ public class LoginListener {
         LoginController loginController = new LoginController();
         loginController.validateLogin(loginEvent);
         loginController.login(loginEvent);
+        System.out.println("successfully logged in");
     }
 
 }

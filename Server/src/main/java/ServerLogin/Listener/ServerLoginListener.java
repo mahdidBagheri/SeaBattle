@@ -20,7 +20,7 @@ public class ServerLoginListener {
         }
         else if(clientRequest.getCommand().equals("login")){
             ServerLoginController serverLoginController = new ServerLoginController(serverConnection);
-            serverLoginController.login();
+            serverLoginController.login(clientRequest);
         }
 
     }
