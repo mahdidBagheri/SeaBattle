@@ -4,6 +4,8 @@ import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
 import Interfaces.NextPanelListener;
 import MainFrame.View.MainPanel;
+import MainMenu.Events.NewGameEvent;
+import MainMenu.Listener.NewGameListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,12 +16,16 @@ public class MainMenuView extends JPanel implements ActionListener {
     NextPanelListener prevPanelListener;
     MainPanel mainPanel;
 
-    JButton newGame;
-    JButton viewOtherGames;
-    JButton viewAcount;
-    JButton logout;
+    JButton newGameBtn;
+    JButton viewOtherGamesBtn;
+    JButton viewAcountBtn;
+    JButton viewScoresBtn;
+    JButton logoutBtn;
+
+    NewGameListener newGameListener;
 
     public MainMenuView(MainPanel mainPanel) throws IOException {
+        this.mainPanel = mainPanel;
         ColorConfig colorConfig = new ColorConfig();
         FrameConfig frameConfig = new FrameConfig();
 
@@ -27,13 +33,43 @@ public class MainMenuView extends JPanel implements ActionListener {
         this.setLayout(null);
         this.setBounds(0,0,(int)(frameConfig.getWidth()),(int)frameConfig.getHeight());
 
-        newGame = new JButton("newGame");
-        newGame.setText("newGame");
-        newGame.setFocusable(false);
-        newGame.setBounds(200,20,110,50);
-        newGame.addActionListener(this);
+        newGameBtn = new JButton("newGame");
+        newGameBtn.setText("newGame");
+        newGameBtn.setFocusable(false);
+        newGameBtn.setBounds(350,70,250,50);
+        newGameBtn.addActionListener(this);
 
-        this.add(newGame);
+        viewOtherGamesBtn = new JButton("view Online games");
+        viewOtherGamesBtn.setText("view Online games");
+        viewOtherGamesBtn.setFocusable(false);
+        viewOtherGamesBtn.setBounds(350,150,250,50);
+        viewOtherGamesBtn.addActionListener(this);
+
+        viewAcountBtn = new JButton("view Acounts");
+        viewAcountBtn.setText("view Acounts");
+        viewAcountBtn.setFocusable(false);
+        viewAcountBtn.setBounds(350,220,250,50);
+        viewAcountBtn.addActionListener(this);
+
+        viewScoresBtn = new JButton("view scores");
+        viewScoresBtn.setText("view scores");
+        viewScoresBtn.setFocusable(false);
+        viewScoresBtn.setBounds(350,220,250,50);
+        viewScoresBtn.addActionListener(this);
+
+        logoutBtn = new JButton("logout");
+        logoutBtn.setText("logout");
+        logoutBtn.setFocusable(false);
+        logoutBtn.setBounds(350,300,250,50);
+        logoutBtn.addActionListener(this);
+
+        newGameListener = new NewGameListener(mainPanel);
+
+        this.add(newGameBtn);
+        this.add(viewOtherGamesBtn);
+        this.add(viewAcountBtn);
+        this.add(viewScoresBtn);
+        this.add(logoutBtn);
     }
 
     public NextPanelListener getPrevPanelListener() {
@@ -46,6 +82,25 @@ public class MainMenuView extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == newGameBtn){
+            NewGameEvent newGameEvent = new NewGameEvent();
+            try {
+                newGameListener.listen(newGameEvent);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+        else if(e.getSource() == viewOtherGamesBtn){
 
+        }
+        else if(e.getSource() == viewAcountBtn){
+
+        }
+        else if(e.getSource() == viewScoresBtn){
+
+        }
+        else if(e.getSource() == logoutBtn){
+
+        }
     }
 }

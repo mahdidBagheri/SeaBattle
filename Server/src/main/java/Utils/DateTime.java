@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class DateTime {
-    LocalDateTime dateTime = LocalDateTime.now();
 
     public String Now(){
         LocalDate Date = LocalDate.now();

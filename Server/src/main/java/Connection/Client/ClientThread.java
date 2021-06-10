@@ -3,12 +3,15 @@ package Connection.Client;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import Game.Exceptions.IlligalLogin;
+import Game.Listener.ServerNewGameListener;
 import ServerLogin.Listener.ServerLoginListener;
 import ServerSignup.Listener.SignupListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClientThread extends Thread {
@@ -34,6 +37,11 @@ public class ClientThread extends Thread {
                 else if(clientRequest.getSource().equals("login")){
                     ServerLoginListener serverLoginListener = new ServerLoginListener(serverConnection);
                     serverLoginListener.listen(clientRequest);
+                }
+                else if(clientRequest.getSource().equals("newGame")){
+                    checkSession(clientRequest.getUsername(),clientRequest.getPassword(),clientRequest.getSession());
+                    ServerNewGameListener serverNewGameListener = new ServerNewGameListener(serverConnection);
+                    serverNewGameListener.listen(clientRequest);
                 }
 
             } catch (IOException e) {
@@ -64,6 +72,9 @@ public class ClientThread extends Thread {
                     ioException.printStackTrace();
                 }
                 e.printStackTrace();
+            } catch (IlligalLogin illigalLogin) {
+                illigalLogin.printStackTrace();
+                break;
             }
 
         }
@@ -72,6 +83,20 @@ public class ClientThread extends Thread {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+    }
+
+    private void checkSession(String username, String password, String session) throws SQLException, IlligalLogin {
+        String sql = String.format("select * from \"UsersTable\" where \"UserName\" = '%s' and \"Password\" = '%s' and \"Session\" = '%s';",username,password,session);
+        ResultSet rs = serverConnection.getConnectionToDataBase().executeQuery(sql);
+        if(rs == null){
+            throw new IlligalLogin("illigal login");
+        }
+        if(rs!=null){
+            if(!rs.next()){
+                throw new IlligalLogin("illigal login");
+            }
+        }
+
     }
 
 }

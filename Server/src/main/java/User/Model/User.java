@@ -6,6 +6,8 @@ public class User {
     String password;
     String email;
     String dateJoined;
+    String lastSeen;
+    String session;
 
     public String getUuid() {
         return uuid;
@@ -45,5 +47,21 @@ public class User {
 
     public void setDateJoined(String dateJoined) {
         this.dateJoined = dateJoined;
+    }
+
+    public String getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(String lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
     }
 }

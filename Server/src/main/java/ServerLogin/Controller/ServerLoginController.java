@@ -4,6 +4,7 @@ import Connection.Client.ClientRequest;
 import Connection.Server.ServerConnection;
 import Connection.Server.ServerPayLoad;
 import Connection.Server.ServerRequest;
+import Utils.DateTime;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -42,12 +43,19 @@ public class ServerLoginController {
 
     public void login(ClientRequest clientRequest) throws SQLException, IOException {
         ServerPayLoad serverPayLoad = new ServerPayLoad();
+        updateLastSeen(clientRequest.getUsername());
         String session = createLoginSession();
         putSessionIntoDataBase(session,clientRequest.getUsername());
         serverPayLoad.getStringStringHashMap().put("session",session);
 
         ServerRequest serverRequest = new ServerRequest(clientRequest.getUsername(),"setLoginSession",serverPayLoad);
         serverConnection.execute(serverRequest);
+    }
+
+    private void updateLastSeen(String username) throws SQLException {
+        DateTime dateTime = new DateTime();
+        String sql = String.format("update \"UsersTable\" set \"LastSeen\" = '%s' where \"UserName\" = '%s';",dateTime.Now(),username);
+        serverConnection.getConnectionToDataBase().executeUpdate(sql);
     }
 
     public String createLoginSession(){
