@@ -1,11 +1,14 @@
 package LogIn.Listener;
 
 import Connection.Exceptions.CouldNotConnectToServerException;
+import Interfaces.NextPanelListener;
 import LogIn.Controller.LoginController;
 import LogIn.Exceptions.EmptyFieldException;
 import LogIn.Exceptions.UsernameAndPasswordDoesNotMatch;
 import LogIn.LoginEvent.LoginEvent;
 import MainFrame.View.MainPanel;
+import MainMenu.View.MainMenuView;
+
 import java.io.IOException;
 
 public class LoginListener {
@@ -31,6 +34,9 @@ public class LoginListener {
         loginController.validateLogin(loginEvent);
         loginController.login(loginEvent);
         System.out.println("successfully logged in");
+
+
+        mainPanel.addMainMenu();
     }
 
 }

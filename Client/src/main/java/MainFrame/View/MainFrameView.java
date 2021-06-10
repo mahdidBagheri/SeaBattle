@@ -1,6 +1,7 @@
 package MainFrame.View;
 
 import Config.FrameConfig.FrameConfig;
+import Interfaces.NextPanelListener;
 import MainFrame.Listener.MainFrameListener;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ public class MainFrameView extends JFrame {
     private static MainFrameView instance = null;
 
     private MainPanel mainPanel;
+
 
     public MainFrameView() throws IOException {
         FrameConfig frameConfig = new FrameConfig();
@@ -24,7 +26,7 @@ public class MainFrameView extends JFrame {
         this.setLocation(frameConfig.getXcoordinate(),frameConfig.getYcoordinate());
         instance = this;
 
-        MainFrameListener mainFrameListener = new MainFrameListener() {
+        NextPanelListener nextPanelListener = new NextPanelListener() {
             @Override
             public void listen(String string) {
                 if(string.equals("Exit")){
@@ -35,7 +37,7 @@ public class MainFrameView extends JFrame {
 
         mainPanel = new MainPanel();
 
-        mainPanel.setMainFrameListener(mainFrameListener);
+        mainPanel.setNextPanelListener(nextPanelListener);
         this.add(mainPanel);
     }
 }

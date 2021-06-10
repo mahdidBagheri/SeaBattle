@@ -3,6 +3,7 @@ package LogIn.View;
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
 import Connection.Exceptions.CouldNotConnectToServerException;
+import Interfaces.NextPanelListener;
 import LogIn.Exceptions.EmptyFieldException;
 import LogIn.Exceptions.UsernameAndPasswordDoesNotMatch;
 import LogIn.Listener.LoginListener;
@@ -25,8 +26,10 @@ public class LoginPanelView extends JPanel implements ActionListener {
 
 
     JButton loginBotton;
+    JButton exitBtn;
 
     LoginListener loginListener;
+    NextPanelListener prevPanelListener;
 
     public LoginPanelView() throws IOException {
         ColorConfig colorConfig = new ColorConfig();
@@ -65,6 +68,12 @@ public class LoginPanelView extends JPanel implements ActionListener {
         loginBotton.setBounds(200,300,110,50);
         loginBotton.addActionListener(this);
 
+        exitBtn = new JButton("exit");
+        exitBtn.setText("exit");
+        exitBtn.setFocusable(false);
+        exitBtn.setBounds(300,400,110,50);
+        exitBtn.addActionListener(this);
+
 
         this.add(titleLable);
         this.add(userNameLable);
@@ -97,5 +106,16 @@ public class LoginPanelView extends JPanel implements ActionListener {
                 usernameAndPasswordDoesNotMatch.printStackTrace();
             }
         }
+        else if(e.getSource() == exitBtn){
+            try {
+                prevPanelListener.listen("Exit");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    public void setNextFrameListener(NextPanelListener nextPanelListener) {
+        this.prevPanelListener = nextPanelListener;
     }
 }
