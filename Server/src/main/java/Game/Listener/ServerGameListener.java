@@ -2,16 +2,17 @@ package Game.Listener;
 
 import Connection.Client.ClientRequest;
 import Connection.Server.ServerConnection;
+import Game.Controller.ServerGameController;
 import User.Controller.UserController;
 import User.Model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ServerNewGameListener {
+public class ServerGameListener {
     ServerConnection serverConnection;
 
-    public ServerNewGameListener(ServerConnection serverConnection) {
+    public ServerGameListener(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
     }
 
@@ -21,18 +22,15 @@ public class ServerNewGameListener {
         if(thereIsMatch){
             startNewGame();
         }
+        else {
+
+        }
     }
 
     private void startNewGame() throws SQLException {
         String[] userUUIDs = findUsers();
-        boolean isUser1Available = informNewGameToUser(userUUIDs[0]);
-        boolean isUser2Available = informNewGameToUser(userUUIDs[1]);
-        if(isUser1Available && isUser2Available){
+        ServerGameController serverGameController = new ServerGameController(userUUIDs);
 
-        }
-        else {
-
-        }
     }
 
     private void insertIntoOnlineUsers(String username) throws SQLException {

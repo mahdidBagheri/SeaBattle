@@ -3,8 +3,8 @@ package Connection.Client;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
-import Game.Exceptions.IlligalLogin;
-import Game.Listener.ServerNewGameListener;
+import ServerLogin.Exceptions.IlligalLogin;
+import Game.Listener.ServerGameListener;
 import ServerLogin.Listener.ServerLoginListener;
 import ServerSignup.Listener.SignupListener;
 
@@ -40,7 +40,7 @@ public class ClientThread extends Thread {
                 }
                 else if(clientRequest.getSource().equals("newGame")){
                     checkSession(clientRequest.getUsername(),clientRequest.getPassword(),clientRequest.getSession());
-                    ServerNewGameListener serverNewGameListener = new ServerNewGameListener(serverConnection);
+                    ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection);
                     serverNewGameListener.listen(clientRequest);
                 }
 

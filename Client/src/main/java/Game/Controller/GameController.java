@@ -1,9 +1,12 @@
 package Game.Controller;
 
+import Connection.Client.ClientConnection;
 import Game.Threads.GameThreadServerExecuter;
 import Game.Threads.GameThreadServerListener;
 import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
+
+import java.io.IOException;
 
 public class GameController {
     UserGamePanel userGamePanel;
@@ -11,14 +14,18 @@ public class GameController {
     GameThreadServerListener gameThreadServerListener;
     GameThreadServerExecuter gameThreadServerExecuter;
 
-    public GameController() {
-        GameThreadServerListener gameThreadServerListener = new GameThreadServerListener();
+    ClientConnection clientConnection;
+
+    public GameController() throws IOException {
+        GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
         this.gameThreadServerListener = gameThreadServerListener;
         gameThreadServerListener.start();
 
-        GameThreadServerExecuter gameThreadServerExecuter = new GameThreadServerExecuter();
+        GameThreadServerExecuter gameThreadServerExecuter = new GameThreadServerExecuter(this);
         this.gameThreadServerExecuter = gameThreadServerExecuter;
         gameThreadServerExecuter.start();
+
+        clientConnection = new ClientConnection();
     }
 
     public void setUserGamePanel(UserGamePanel userGamePanel) {
