@@ -3,7 +3,9 @@ package MainMenu.Listener;
 import Connection.Client.ClientConnection;
 import Connection.Client.ClientPayLoad;
 import Connection.Client.ClientRequest;
-import Connection.Server.ServerRequest;
+import Game.Controller.GameController;
+import Game.Threads.GameThreadServerListener;
+import Game.View.UserGamePanel;
 import MainFrame.View.MainPanel;
 import MainMenu.Events.NewGameEvent;
 import Utils.UserInfoHandler;
@@ -31,7 +33,12 @@ public class NewGameListener {
                 userInfo.get("username"),userInfo.get("password"));
 
         clientConnection.execute(clientRequest);
-        mainPanel.addUserGamePanel();
+
+        UserGamePanel userGamePanel = new UserGamePanel();
+        mainPanel.addUserGamePanel(userGamePanel);
+        GameController gameController = new GameController();
+        gameController.setUserGamePanel(userGamePanel);
+
 
     }
 

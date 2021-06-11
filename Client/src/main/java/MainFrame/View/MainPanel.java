@@ -95,9 +95,11 @@ public class MainPanel extends JPanel {
         instance.repaint();
     }
 
-    public void addUserGamePanel() throws IOException {
+    public void addUserGamePanel(UserGamePanel userGamePanel) throws IOException {
         instance.clear();
-        userGamePanel = new UserGamePanel(instance);
+        this.userGamePanel = userGamePanel;
+
+        userGamePanel.setMainPanel(instance);
         NextPanelListener nextPanelListener = new NextPanelListener() {
             @Override
             public void listen(String string) throws IOException {

@@ -19,8 +19,8 @@ public class UserGamePanel extends JPanel implements ActionListener {
     JButton shuffleBtn;
     BoardPanel boardPanel;
 
-    public UserGamePanel(MainPanel mainPanel) throws IOException {
-        this.mainPanel = mainPanel;
+    public UserGamePanel() throws IOException {
+
 
         ColorConfig colorConfig = new ColorConfig();
         FrameConfig frameConfig = new FrameConfig();
@@ -66,5 +66,9 @@ public class UserGamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public void setMainPanel(MainPanel mainPanel) {
+        this.mainPanel = mainPanel;
     }
 }
