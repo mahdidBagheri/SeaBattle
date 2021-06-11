@@ -1,8 +1,11 @@
 package Game.Listener;
 
 import Connection.Client.ClientRequest;
+import Connection.Client.ClientThread;
 import Connection.Server.ServerConnection;
 import Game.Controller.ServerGameController;
+import Game.Exceptions.NotAvailableUserException;
+import Game.Model.OnlineGames;
 import User.Controller.UserController;
 import User.Model.User;
 
@@ -11,66 +14,48 @@ import java.sql.SQLException;
 
 public class ServerGameListener {
     ServerConnection serverConnection;
+    OnlineGames onlineGames;
 
-    public ServerGameListener(ServerConnection serverConnection) {
+    public ServerGameListener(ServerConnection serverConnection, OnlineGames onlineGames) {
         this.serverConnection = serverConnection;
-    }
-
-    public void listen(ClientRequest clientRequest) throws SQLException {
-        insertIntoOnlineUsers(clientRequest.getUsername());
-        boolean thereIsMatch = checkIfThereIsAnyMatch();
-        if(thereIsMatch){
-            startNewGame();
-        }
-        else {
-
-        }
-    }
-
-    private void startNewGame() throws SQLException {
-        String[] userUUIDs = findUsers();
-        ServerGameController serverGameController = new ServerGameController(userUUIDs);
+        this.onlineGames = onlineGames;
 
     }
 
-    private void insertIntoOnlineUsers(String username) throws SQLException {
-        User mainUser = new User();
-        UserController mainUserController = new UserController(mainUser);
+    public void listen(ClientRequest clientRequest) throws SQLException, NotAvailableUserException, InterruptedException {
+        User user = new User();
+        UserController userController = new UserController(user);
+        userController.readUserDataByUsername(clientRequest.getUsername());
 
-        String sql = String.format("insert into \"UsersTable\" insert (\"UserUUID\") values ('%s')",mainUser.getUsername());
-        serverConnection.getConnectionToDataBase().executeUpdate(sql);
-    }
-
-    public boolean checkIfThereIsAnyMatch() throws SQLException {
-        String sql = String.format("select \"UserUUID\" from \"OnlineUsers\";");
-        ResultSet rs = serverConnection.getConnectionToDataBase().executeQuery(sql);
-        int users = 0;
-        if(rs != null){
-            if(rs.next()){
-                users++;
+        if(clientRequest.getCommand().equals("newGame")){
+            ServerGameController serverGameController = checkForGameWaitingForUserToJoin();
+            if(serverGameController != null){
+                serverGameController.joinGame(serverConnection,user);
             }
-            if(rs.next()){
-                users++;
+            else {
+                ServerGameController newServerGameController = new ServerGameController(serverConnection,user);
+                onlineGames.addOnlineGame(newServerGameController);
+                boolean shouldStart = serverGameController.waitForOtherUserToJoin();
+                if(shouldStart){
+                    serverGameController.initialize();
+                }
+                else {
+                    System.out.println("could not find any user");
+                }
             }
         }
-        if(users == 2){
-            return true;
-        }
-        return false;
     }
-    public String[] findUsers() throws SQLException {
-        String sql = String.format("select \"UserUUID\" from \"OnlineUsers\";");
-        ResultSet rs = serverConnection.getConnectionToDataBase().executeQuery(sql);
-        String[] userUUIDs = new String[2];
 
-        if(rs != null){
-            if(rs.next()){
-                userUUIDs[0] = rs.getString(1);
-            }
-            if(rs.next()){
-                userUUIDs[1] = rs.getString(1);
+    private ServerGameController checkForGameWaitingForUserToJoin() {
+        for (ServerGameController serverGameController : onlineGames.getOnlineGames()) {
+            if(serverGameController.getUser2() == null){
+                return serverGameController;
             }
         }
-        return userUUIDs;
+        return null;
     }
+
+
+
+
 }

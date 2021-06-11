@@ -1,47 +1,79 @@
 package Game.Controller;
 
+import Connection.Exceptions.CouldNotConnectToServerException;
+import Connection.Server.ServerConnection;
+import Connection.Server.ServerRequest;
 import Game.Exceptions.NotAvailableUserException;
-import User.Controller.UserController;
+import Interfaces.Constants;
 import User.Model.User;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class ServerGameController {
     User user1;
+    ServerConnection user1Connection;
+
     User user2;
+    ServerConnection user2Connection;
+
+    boolean continueWaiting = true;
 
 
-    public ServerGameController(String[] userUUIDs) throws SQLException, NotAvailableUserException {
-        User user1 = new User();
-        UserController user1Controller = new UserController(user1);
-        user1Controller.readUserDataByUUID(userUUIDs[0]);
-        this.user1 = user1;
-
-        User user2 = new User();
-        UserController user2Controller = new UserController(user2);
-        user2Controller.readUserDataByUUID(userUUIDs[1]);
-        this.user2 = user2;
-
-        initialize();
-
+    public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
+        this.user1 = user;
+        this.user1Connection = serverConnection;
 
     }
 
-    public void initialize() throws NotAvailableUserException {
+    public boolean waitForOtherUserToJoin() throws InterruptedException {
+        long start = System.currentTimeMillis();
+
+        while (continueWaiting && user2 == null && System.currentTimeMillis() - start > Constants.timeWaitForUsersToJoin){
+
+            Thread.sleep(100);
+        }
+        if(user2 != null){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void initialize() throws NotAvailableUserException, IOException, CouldNotConnectToServerException, ClassNotFoundException {
         boolean isBothAreAvailable = checkUsersAvailability();
         if(!isBothAreAvailable){
             throw new NotAvailableUserException("User not available");
         }
+
+        System.out.println("Create game!");
     }
 
-    public boolean checkUsersAvailability(){
-        boolean isUser1Available = informNewGameToUser(user1.getUuid());
-        boolean isUser2Available = informNewGameToUser(user2.getUuid());
+    public boolean checkUsersAvailability() throws CouldNotConnectToServerException, IOException, ClassNotFoundException {
+        boolean isUser1Available = informNewGameToUser(user1Connection, user1);
+        boolean isUser2Available = informNewGameToUser(user2Connection, user1);
         if(isUser1Available && isUser2Available){
             return true;
         }
         else {
             return false;
         }
+    }
+
+    private boolean informNewGameToUser(ServerConnection user1Connection, User user) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
+        ServerRequest serverRequest = new ServerRequest(user.getUsername(),"connectionCheck",null);
+        return user1Connection.executeBoolean(serverRequest);
+    }
+
+    public User getUser1() {
+        return user1;
+    }
+
+    public User getUser2() {
+        return user2;
+    }
+
+    public void joinGame(ServerConnection serverConnection, User user) {
     }
 }

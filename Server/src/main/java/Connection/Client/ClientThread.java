@@ -3,6 +3,7 @@ package Connection.Client;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import Game.Model.OnlineGames;
 import ServerLogin.Exceptions.IlligalLogin;
 import Game.Listener.ServerGameListener;
 import ServerLogin.Listener.ServerLoginListener;
@@ -13,12 +14,15 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class ClientThread extends Thread {
     private ServerConnection serverConnection;
+    private volatile OnlineGames onlineGames;
 
-    public ClientThread(Socket socket) {
+    public ClientThread(Socket socket, OnlineGames onlineGames) {
         this.serverConnection = new ServerConnection(socket);
+        this.onlineGames = onlineGames;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class ClientThread extends Thread {
                 }
                 else if(clientRequest.getSource().equals("newGame")){
                     checkSession(clientRequest.getUsername(),clientRequest.getPassword(),clientRequest.getSession());
-                    ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection);
+                    ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection, onlineGames);
                     serverNewGameListener.listen(clientRequest);
                 }
 

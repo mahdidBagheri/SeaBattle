@@ -1,8 +1,12 @@
 package Connection.Server;
 
+import Connection.Client.ClientRequest;
 import Connection.DataCaseConnection.ConnectionToDataBase;
+import Connection.Exceptions.CouldNotConnectToServerException;
+import Connection.Utils.ServerWaitForInput;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -30,9 +34,29 @@ public class ServerConnection {
         oos.writeObject(serverRequest);
         oos.flush();
         os.flush();
+    }
+
+    public boolean executeBoolean(ServerRequest serverRequest) throws IOException,
+            CouldNotConnectToServerException, ClassNotFoundException {
+
+        OutputStream os = socket.getOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeObject(serverRequest);
+        os.flush();
+        oos.flush();
+
+        ServerWaitForInput.waitForInput(socket);
+        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+        ClientRequest clientRequest = (ClientRequest) objectInputStream.readObject();
 
 
-
+        System.out.println(serverRequest.getCommand());
+        if (clientRequest.getCommand().equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 }
