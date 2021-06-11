@@ -27,7 +27,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
         this.setBackground(colorConfig.getColor03());
         this.setLayout(null);
-        this.setBounds((int)(frameConfig.getWidth()/2),0,(int)(frameConfig.getWidth()/2),(int)frameConfig.getHeight());
+        this.setBounds(0,0,(int)(frameConfig.getWidth()/2),(int)frameConfig.getHeight());
 
 
         findingOpponentLbl = new JLabel();

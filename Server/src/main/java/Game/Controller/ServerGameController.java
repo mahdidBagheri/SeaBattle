@@ -29,7 +29,7 @@ public class ServerGameController {
     public boolean waitForOtherUserToJoin() throws InterruptedException {
         long start = System.currentTimeMillis();
 
-        while (continueWaiting && user2 == null && System.currentTimeMillis() - start > Constants.timeWaitForUsersToJoin){
+        while (continueWaiting && user2 == null && System.currentTimeMillis() - start < Constants.timeWaitForUsersToJoin){
 
             Thread.sleep(100);
         }
@@ -52,7 +52,7 @@ public class ServerGameController {
 
     public boolean checkUsersAvailability() throws CouldNotConnectToServerException, IOException, ClassNotFoundException {
         boolean isUser1Available = informNewGameToUser(user1Connection, user1);
-        boolean isUser2Available = informNewGameToUser(user2Connection, user1);
+        boolean isUser2Available = informNewGameToUser(user2Connection, user2);
         if(isUser1Available && isUser2Available){
             return true;
         }
@@ -61,9 +61,9 @@ public class ServerGameController {
         }
     }
 
-    private boolean informNewGameToUser(ServerConnection user1Connection, User user) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
+    private boolean informNewGameToUser(ServerConnection userConnection, User user) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
         ServerRequest serverRequest = new ServerRequest(user.getUsername(),"connectionCheck",null);
-        return user1Connection.executeBoolean(serverRequest);
+        return userConnection.executeBoolean(serverRequest);
     }
 
     public User getUser1() {
@@ -75,5 +75,11 @@ public class ServerGameController {
     }
 
     public void joinGame(ServerConnection serverConnection, User user) {
+        this.user2 = user;
+        this.user2Connection = serverConnection;
+    }
+
+    public void startGame() throws InterruptedException {
+        Thread.sleep(120000);
     }
 }

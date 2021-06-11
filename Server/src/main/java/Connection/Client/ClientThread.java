@@ -3,6 +3,7 @@ package Connection.Client;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import Game.Exceptions.NotAvailableUserException;
 import Game.Model.OnlineGames;
 import ServerLogin.Exceptions.IlligalLogin;
 import Game.Listener.ServerGameListener;
@@ -27,27 +28,28 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        while (!serverConnection.getSocket().isClosed()) {
+        //while (!serverConnection.getSocket().isClosed()) {
+
             try {
-                ServerWaitForInput.waitForInput(serverConnection.getSocket());
+                ServerWaitForInput serverWaitForInput = new ServerWaitForInput();
+                serverWaitForInput.waitForInput(serverConnection.getSocket());
                 ObjectInputStream objectInputStream = new ObjectInputStream(serverConnection.getSocket().getInputStream());
                 ClientRequest clientRequest = (ClientRequest) objectInputStream.readObject();
+
 
                 if (clientRequest.getSource().equals("signup")) {
                     SignupListener signupListener = new SignupListener(serverConnection);
                     signupListener.listen(clientRequest);
-                }
-
-                else if(clientRequest.getSource().equals("login")){
+                } else if (clientRequest.getSource().equals("login")) {
                     ServerLoginListener serverLoginListener = new ServerLoginListener(serverConnection);
                     serverLoginListener.listen(clientRequest);
-                }
-                else if(clientRequest.getSource().equals("newGame")){
-                    checkSession(clientRequest.getUsername(),clientRequest.getPassword(),clientRequest.getSession());
+                } else if (clientRequest.getSource().equals("newGame")) {
+                    checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection, onlineGames);
                     serverNewGameListener.listen(clientRequest);
                 }
 
+                int a = 0;
             } catch (IOException e) {
                 try {
                     serverConnection.getSocket().close();
@@ -78,10 +80,14 @@ public class ClientThread extends Thread {
                 e.printStackTrace();
             } catch (IlligalLogin illigalLogin) {
                 illigalLogin.printStackTrace();
-                break;
+                //break;
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            } catch (NotAvailableUserException e) {
+                e.printStackTrace();
             }
 
-        }
+        //}
         try {
             serverConnection.getSocket().close();
         } catch (IOException ioException) {

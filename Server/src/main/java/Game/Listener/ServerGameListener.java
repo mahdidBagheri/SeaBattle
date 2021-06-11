@@ -2,6 +2,7 @@ package Game.Listener;
 
 import Connection.Client.ClientRequest;
 import Connection.Client.ClientThread;
+import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Game.Controller.ServerGameController;
 import Game.Exceptions.NotAvailableUserException;
@@ -9,6 +10,7 @@ import Game.Model.OnlineGames;
 import User.Controller.UserController;
 import User.Model.User;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -22,22 +24,25 @@ public class ServerGameListener {
 
     }
 
-    public void listen(ClientRequest clientRequest) throws SQLException, NotAvailableUserException, InterruptedException {
+    public void listen(ClientRequest clientRequest) throws SQLException, NotAvailableUserException, InterruptedException, ClassNotFoundException, IOException, CouldNotConnectToServerException {
         User user = new User();
         UserController userController = new UserController(user);
         userController.readUserDataByUsername(clientRequest.getUsername());
 
         if(clientRequest.getCommand().equals("newGame")){
+            serverConnection.getSocket().setKeepAlive(true);
             ServerGameController serverGameController = checkForGameWaitingForUserToJoin();
             if(serverGameController != null){
                 serverGameController.joinGame(serverConnection,user);
+                serverGameController.startGame();
+
             }
             else {
                 ServerGameController newServerGameController = new ServerGameController(serverConnection,user);
                 onlineGames.addOnlineGame(newServerGameController);
-                boolean shouldStart = serverGameController.waitForOtherUserToJoin();
+                boolean shouldStart = newServerGameController.waitForOtherUserToJoin();
                 if(shouldStart){
-                    serverGameController.initialize();
+                    newServerGameController.initialize();
                 }
                 else {
                     System.out.println("could not find any user");

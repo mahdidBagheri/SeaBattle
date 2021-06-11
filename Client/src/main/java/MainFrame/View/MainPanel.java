@@ -71,8 +71,19 @@ public class MainPanel extends JPanel {
     }
 
     public void clear(){
-        instance.remove(loginPanelView);
-        instance.remove(signUpPanelView);
+        if(loginPanelView != null){
+            instance.remove(loginPanelView);
+        }
+        if(signUpPanelView != null){
+            instance.remove(signUpPanelView);
+        }
+        if(mainMenuView != null){
+            instance.remove(mainMenuView);
+        }
+        if(userGamePanel != null){
+            instance.remove(userGamePanel);
+        }
+
     }
 
     public void addMainMenu() throws IOException {

@@ -13,6 +13,7 @@ public class ClientConnection {
 
     public ClientConnection() throws IOException {
         this.socket = new Socket("localhost", Constants.portNumber);
+        System.out.println(socket);
     }
 
     public boolean executeBoolean(ClientRequest clientRequest) throws IOException, ClassNotFoundException, CouldNotConnectToServerException {

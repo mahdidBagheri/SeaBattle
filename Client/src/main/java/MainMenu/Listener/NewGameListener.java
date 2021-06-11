@@ -38,6 +38,7 @@ public class NewGameListener {
         mainPanel.addUserGamePanel(userGamePanel);
         GameController gameController = new GameController();
         gameController.setUserGamePanel(userGamePanel);
+        gameController.setClientConnection(clientConnection);
 
 
     }

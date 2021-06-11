@@ -20,11 +20,12 @@ public class GameController {
     ClientConnection clientConnection;
 
     public GameController() throws IOException {
+
         GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
         this.gameThreadServerListener = gameThreadServerListener;
         gameThreadServerListener.start();
 
-        clientConnection = new ClientConnection();
+
     }
 
     public void setUserGamePanel(UserGamePanel userGamePanel) {
@@ -42,5 +43,9 @@ public class GameController {
 
     public ClientConnection getClientConnection() {
         return clientConnection;
+    }
+
+    public void setClientConnection(ClientConnection clientConnection) {
+        this.clientConnection = clientConnection;
     }
 }

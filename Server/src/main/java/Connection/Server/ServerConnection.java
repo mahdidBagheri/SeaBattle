@@ -45,7 +45,8 @@ public class ServerConnection {
         os.flush();
         oos.flush();
 
-        ServerWaitForInput.waitForInput(socket);
+        ServerWaitForInput serverWaitForInput = new ServerWaitForInput();
+        serverWaitForInput.waitForInput(socket);
         ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
         ClientRequest clientRequest = (ClientRequest) objectInputStream.readObject();

@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class ServerWaitForInput {
 
-    public static void waitForInput(Socket socket) throws CouldNotConnectToServerException {
+    public void waitForInput(Socket socket) throws CouldNotConnectToServerException {
 
         long start = System.currentTimeMillis();
         while (true) {
