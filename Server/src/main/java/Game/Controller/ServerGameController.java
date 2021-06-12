@@ -4,6 +4,8 @@ import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Server.ServerRequest;
 import Game.Exceptions.NotAvailableUserException;
+import Game.Threads.GameThreadClientListener;
+import Game.Threads.ServerGameThread;
 import Interfaces.Constants;
 import User.Model.User;
 
@@ -80,6 +82,17 @@ public class ServerGameController {
     }
 
     public void startGame() throws InterruptedException {
-        Thread.sleep(120000);
+        ServerGameThread serverGameThread = new ServerGameThread();
+        serverGameThread.start();
+    }
+
+    public void user2StartListening() {
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(user2,user2Connection);
+        gameThreadClientListener.run();
+    }
+
+    public void user1StartListening() {
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(user1,user1Connection);
+        gameThreadClientListener.run();
     }
 }

@@ -35,6 +35,7 @@ public class ServerGameListener {
             if(serverGameController != null){
                 serverGameController.joinGame(serverConnection,user);
                 serverGameController.startGame();
+                serverGameController.user2StartListening();
 
             }
             else {
@@ -43,6 +44,7 @@ public class ServerGameListener {
                 boolean shouldStart = newServerGameController.waitForOtherUserToJoin();
                 if(shouldStart){
                     newServerGameController.initialize();
+                    newServerGameController.user1StartListening();
                 }
                 else {
                     System.out.println("could not find any user");
