@@ -55,7 +55,7 @@ public class ServerGameListener {
 
     private ServerGameController checkForGameWaitingForUserToJoin() {
         for (ServerGameController serverGameController : onlineGames.getOnlineGames()) {
-            if(serverGameController.getUser2() == null){
+            if(serverGameController.getPlayer2() == null){
                 return serverGameController;
             }
         }

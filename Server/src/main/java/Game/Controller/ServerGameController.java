@@ -7,35 +7,36 @@ import Game.Exceptions.NotAvailableUserException;
 import Game.Threads.GameThreadClientListener;
 import Game.Threads.ServerGameThread;
 import Interfaces.Constants;
+import User.Model.Player;
 import User.Model.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class ServerGameController {
-    User user1;
-    ServerConnection user1Connection;
 
-    User user2;
-    ServerConnection user2Connection;
+    Player player1;
+    Player player2;
 
-    boolean continueWaiting = true;
+    boolean continueWaitingForUserToJoin = true;
 
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
-        this.user1 = user;
-        this.user1Connection = serverConnection;
+        this.player1 = new Player();
+        this.player1.setUser(user);
+        this.player1.setConnection(serverConnection);
 
     }
 
     public boolean waitForOtherUserToJoin() throws InterruptedException {
         long start = System.currentTimeMillis();
 
-        while (continueWaiting && user2 == null && System.currentTimeMillis() - start < Constants.timeWaitForUsersToJoin){
+        while (continueWaitingForUserToJoin && player2 == null && System.currentTimeMillis() - start < Constants.timeWaitForUsersToJoin){
 
             Thread.sleep(100);
         }
-        if(user2 != null){
+        if(player2 != null){
             return true;
         }
         else {
@@ -49,12 +50,21 @@ public class ServerGameController {
             throw new NotAvailableUserException("User not available");
         }
 
-        System.out.println("Create game!");
+        createTables();
+        shuffleBoard();
+        startTimer();
+
+
+    }
+
+    private void createTables() {
+
+        String sql1 = String.format("create table \"")
     }
 
     public boolean checkUsersAvailability() throws CouldNotConnectToServerException, IOException, ClassNotFoundException {
-        boolean isUser1Available = informNewGameToUser(user1Connection, user1);
-        boolean isUser2Available = informNewGameToUser(user2Connection, user2);
+        boolean isUser1Available = informNewGameToUser(player1);
+        boolean isUser2Available = informNewGameToUser(player2);
         if(isUser1Available && isUser2Available){
             return true;
         }
@@ -63,36 +73,40 @@ public class ServerGameController {
         }
     }
 
-    private boolean informNewGameToUser(ServerConnection userConnection, User user) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
-        ServerRequest serverRequest = new ServerRequest(user.getUsername(),"connectionCheck",null);
-        return userConnection.executeBoolean(serverRequest);
+    private boolean informNewGameToUser(Player player) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
+        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"connectionCheck",null);
+        return player.getConnection().executeBoolean(serverRequest);
     }
 
-    public User getUser1() {
-        return user1;
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public User getUser2() {
-        return user2;
+    public Player getPlayer2() {
+        return player2;
     }
 
     public void joinGame(ServerConnection serverConnection, User user) {
-        this.user2 = user;
-        this.user2Connection = serverConnection;
+        this.player2 = new Player();
+        player2.setUser(user);
+        player2.setConnection(serverConnection);
+
     }
 
-    public void startGame() throws InterruptedException {
-        ServerGameThread serverGameThread = new ServerGameThread();
+    public void startGame() {
+        ServerGameThread serverGameThread = new ServerGameThread(this);
         serverGameThread.start();
     }
 
-    public void user2StartListening() {
-        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(user2,user2Connection);
+    public void user1StartListening() {
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(player1);
         gameThreadClientListener.run();
     }
 
-    public void user1StartListening() {
-        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(user1,user1Connection);
+    public void user2StartListening() {
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(player2);
         gameThreadClientListener.run();
     }
+
+
 }

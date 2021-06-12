@@ -3,15 +3,14 @@ package Game.Threads;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import User.Model.Player;
 import User.Model.User;
 
 public class GameThreadClientListener extends Thread {
-    User user;
-    ServerConnection userConnection;
+    Player player;
 
-    public GameThreadClientListener(User user, ServerConnection userConnection) {
-        this.user = user;
-        this.userConnection = userConnection;
+    public GameThreadClientListener(Player player) {
+        this.player = player;
     }
 
     @Override
@@ -21,7 +20,7 @@ public class GameThreadClientListener extends Thread {
         try {
             while (isRunning) {
                 ServerWaitForInput serverWaitForInput = new ServerWaitForInput();
-                serverWaitForInput.waitForInput(userConnection.getSocket());
+                serverWaitForInput.waitForInput(player.getConnection().getSocket());
             }
         } catch (CouldNotConnectToServerException e) {
             e.printStackTrace();
