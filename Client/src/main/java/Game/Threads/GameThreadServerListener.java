@@ -30,6 +30,7 @@ public class GameThreadServerListener extends Thread {
                 }
                 else if(serverRequest.getCommand().equals("GameData")){
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
+                    gameController.opponentFound();
                 }
 
             } catch (CouldNotConnectToServerException e) {

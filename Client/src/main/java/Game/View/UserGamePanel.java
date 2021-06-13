@@ -2,6 +2,9 @@ package Game.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Game.Controller.GameController;
+import Game.Listener.BoardPanelListener;
+import Game.Listener.UserGamePanelListener;
 import MainFrame.View.MainPanel;
 
 import javax.swing.*;
@@ -19,6 +22,8 @@ public class UserGamePanel extends JPanel implements ActionListener {
     JButton shuffleBtn;
     BoardPanel boardPanel;
 
+    UserGamePanelListener userGamePanelListener;
+
     public UserGamePanel() throws IOException {
 
 
@@ -32,27 +37,31 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
         findingOpponentLbl = new JLabel();
         findingOpponentLbl.setBounds(20,20,150,20);
-        findingOpponentLbl.setText("SingUp!");
+        findingOpponentLbl.setText("seeking for opponent ... ");
         findingOpponentLbl.setVisible(true);
 
         timerLbl = new JLabel();
-        timerLbl.setBounds(120,20,150,20);
-        timerLbl.setText("SingUp!");
+        timerLbl.setBounds(250,20,150,20);
+        timerLbl.setText("00:00");
         timerLbl.setVisible(true);
 
         shuffleBtn = new JButton("shuffle");
         shuffleBtn.setText("shuffle");
         shuffleBtn.setFocusable(false);
-        shuffleBtn.setBounds(120,400,250,50);
+        shuffleBtn.setBounds(120,475,250,50);
         shuffleBtn.addActionListener(this);
+        shuffleBtn.setEnabled(false);
 
         readyBtn = new JButton("ready");
         readyBtn.setText("ready");
         readyBtn.setFocusable(false);
-        readyBtn.setBounds(350,70,250,50);
+        readyBtn.setBounds(425,30,100,50);
         readyBtn.addActionListener(this);
+        readyBtn.setEnabled(false);
 
         boardPanel = new BoardPanel();
+        boardPanel.setBoardPanelListener(new BoardPanelListener(userGamePanelListener));
+        boardPanel.setEnabled(false);
 
         this.add(findingOpponentLbl);
         this.add(timerLbl);
@@ -65,10 +74,45 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == readyBtn){
+
+        }
+        if(e.getSource() == shuffleBtn){
+
+        }
 
     }
 
     public void setMainPanel(MainPanel mainPanel) {
         this.mainPanel = mainPanel;
+    }
+
+    public MainPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public JLabel getFindingOpponentLbl() {
+        return findingOpponentLbl;
+    }
+
+    public JLabel getTimerLbl() {
+        return timerLbl;
+    }
+
+    public JButton getReadyBtn() {
+        return readyBtn;
+    }
+
+    public JButton getShuffleBtn() {
+        return shuffleBtn;
+    }
+
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
+    }
+
+
+    public void setUserGamePanelListener(UserGamePanelListener userGamePanelListener) {
+        this.userGamePanelListener = userGamePanelListener;
     }
 }
