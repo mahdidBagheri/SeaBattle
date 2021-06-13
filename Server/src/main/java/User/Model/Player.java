@@ -23,4 +23,12 @@ public class Player {
     public void setConnection(ServerConnection connection) {
         this.connection = connection;
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }

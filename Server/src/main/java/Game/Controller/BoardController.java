@@ -2,6 +2,8 @@ package Game.Controller;
 
 import Game.Model.Board;
 
+import java.util.Random;
+
 public class BoardController {
     Board board;
 
@@ -15,6 +17,87 @@ public class BoardController {
 
     public void hit(int x, int y){
 
+    }
+
+    public void shuffle(){
+        ///BattleShip
+        locateShip('a',4);
+
+        //Cruiser
+        locateShip('b',3);
+        locateShip('c',3);
+
+        //Destroyer
+        locateShip('d',2);
+        locateShip('e',2);
+        locateShip('f',2);
+
+        //Frigate
+        locateShip('g',1);
+        locateShip('h',1);
+        locateShip('i',1);
+        locateShip('j',1);
+
+    }
+
+    private void locateShip(Character symbol, int length) {
+        Random random = new Random();
+        int orientation = 0;
+        int x = 0;
+        int y = 0;
+        do {
+            int orentation = random.nextInt(2);
+            if (orentation == 0) {
+                //horizantal
+                x = random.nextInt(9 - length + 1);
+                y = random.nextInt(9);
+            } else if (orentation == 1) {
+                //vertical
+                x = random.nextInt(9);
+                y = random.nextInt(9 - length + 1);
+            }
+        }while (!isPossible(orientation, x, y, length));
+
+        for (int i = 0; i <length ; i++) {
+            if(orientation == 0){
+                board.getBoard()[y][x+i] = "+" + symbol;
+            }
+            else if(orientation == 1){
+                board.getBoard()[y+i][x] = "+" + symbol;
+            }
+        }
+
+
+    }
+
+
+
+    private boolean isPossible(int orientation, int x, int y, int length) {
+        if(orientation == 0){
+            for (int i = -1; i <length+1 ; i++) {
+                for (int j = -1; j < +1; j++) {
+                    if(x+i >= 0 &&x+i<=9 && j+y>=0 && j+y<=9 ){
+                        if(!board.getBoard()[y + j][x + i].equals("+0")){
+                            return false;
+                        }
+                    }
+                }
+
+            }
+        }
+        else if(orientation == 1){
+            for (int i = -1; i <length+1 ; i++) {
+                for (int j = -1; j < +1; j++) {
+                    if(x+i >= 0 &&x+i<=9 && j+y>=0 && j+y<=9 ){
+                        if(!board.getBoard()[x + i][y + j].equals("+0")){
+                            return false;
+                        }
+                    }
+                }
+
+            }
+        }
+        return true;
     }
 
 

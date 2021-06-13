@@ -44,22 +44,57 @@ public class ServerGameController {
         }
     }
 
-    public void initialize() throws NotAvailableUserException, IOException, CouldNotConnectToServerException, ClassNotFoundException {
+    public void initialize() throws NotAvailableUserException, IOException, CouldNotConnectToServerException, ClassNotFoundException, SQLException {
         boolean isBothAreAvailable = checkUsersAvailability();
         if(!isBothAreAvailable){
             throw new NotAvailableUserException("User not available");
         }
 
-        createTables();
-        shuffleBoard();
-        startTimer();
+        insertGameToDataBase();
+        shuffleBoards();
+        int a = 0;
+        //startTimer();
 
 
     }
 
-    private void createTables() {
+    private void shuffleBoards() {
+        shuffleBoard(player1);
+        shuffleBoard(player2);
+    }
 
-        String sql1 = String.format("create table \"")
+    private void shuffleBoard(Player player) {
+        BoardController boardController = new BoardController(player.getBoard());
+        boardController.shuffle();
+    }
+
+    private void insertGameToDataBase() throws SQLException {
+        String board1 = createBoard(player1);
+        String board2 = createBoard(player2);
+
+
+        String sql3 = String.format("insert into \"GamesTable\"(\"UUID\",\"Player1\",\"Player2\",\"board1\",\"board2\")" +
+                        " values (uuid_generate_v4(),'%s','%s','%s',%s');",player1.getUser().getUuid(),
+                        player2.getUser().getUuid(),board1,board2);
+        player1.getConnection().getConnectionToDataBase().executeUpdate(sql3);
+
+
+    }
+
+    public String createBoard(Player player) throws SQLException {
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+
+        String createBoard1 = String.format("create table \"board%s\" (\"Cells\");",uuidString);
+        player.getConnection().getConnectionToDataBase().executeUpdate(createBoard1);
+
+        String insertToTable1;
+        for(int i = 0; i < 100; i++){
+            insertToTable1 = String.format("insert into \"board%s\" (\"Cells\") values (+0);",uuidString);
+            player.getConnection().getConnectionToDataBase().executeUpdate(insertToTable1);
+        }
+
+        return "board" + uuidString;
     }
 
     public boolean checkUsersAvailability() throws CouldNotConnectToServerException, IOException, ClassNotFoundException {
