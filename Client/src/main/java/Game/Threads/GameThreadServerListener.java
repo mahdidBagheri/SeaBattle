@@ -28,6 +28,9 @@ public class GameThreadServerListener extends Thread {
                 if(serverRequest.getCommand().equals("connectionCheck")){
                     gameController.AnswerCheckConnectionFromServer();
                 }
+                else if(serverRequest.getCommand().equals("GameData")){
+                    gameController.applyGameData(serverRequest.getPayLoad().getGameData());
+                }
 
             } catch (CouldNotConnectToServerException e) {
                 e.printStackTrace();

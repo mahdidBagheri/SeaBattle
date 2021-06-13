@@ -1,7 +1,6 @@
 package Connection.Server;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 public class ServerRequest implements Serializable {
     private String userName;

@@ -2,8 +2,11 @@ package Game.Controller;
 
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
+import Connection.Server.ServerPayLoad;
 import Connection.Server.ServerRequest;
 import Game.Exceptions.NotAvailableUserException;
+import Game.Model.Board;
+import Game.Model.GameData;
 import Game.Threads.GameThreadClientListener;
 import Game.Threads.ServerGameThread;
 import Interfaces.Constants;
@@ -21,6 +24,7 @@ public class ServerGameController {
 
     boolean continueWaitingForUserToJoin = true;
 
+    GameData gameData;
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
         this.player1 = new Player();
@@ -52,10 +56,28 @@ public class ServerGameController {
 
         insertGameToDataBase();
         shuffleBoards();
+
+        sendGameData();
+        startTimer();
         int a = 0;
-        //startTimer();
 
+    }
 
+    private void startTimer() {
+    }
+
+    private void sendGameData() throws IOException {
+        updateGameData();
+        ServerPayLoad serverPayLoad = new ServerPayLoad();
+        serverPayLoad.setGameData(gameData);
+        ServerRequest serverRequest = new ServerRequest(player1.getUser().getUsername(),"GameData",serverPayLoad);
+        player1.getConnection().execute(serverRequest);
+        player2.getConnection().execute(serverRequest);
+
+    }
+
+    private void updateGameData() {
+        this.gameData = new GameData(player1.getUser(), player1.getBoard(), player2.getUser(), player2.getBoard(), player1.getUser(),30);
     }
 
     private void shuffleBoards() {

@@ -3,6 +3,8 @@ package Game.Controller;
 import Config.NetWorkConfig.NetworkConfig;
 import Connection.Client.ClientConnection;
 import Connection.Client.ClientRequest;
+import Game.Model.Board;
+import Game.Model.GameData;
 import Game.Threads.GameThreadServerExecuter;
 import Game.Threads.GameThreadServerListener;
 import Game.View.OpponentGamePanel;
@@ -47,5 +49,22 @@ public class GameController {
 
     public void setClientConnection(ClientConnection clientConnection) {
         this.clientConnection = clientConnection;
+    }
+
+    public void applyGameData(GameData gameData) {
+
+        printBoard(gameData.getBoard1());
+        printBoard(gameData.getBoard2());
+        int a = 0;
+    }
+
+    public void printBoard(Board board){
+        for (int i = 0; i < 10; i++) {
+            System.out.println("\n");
+            for (int j = 0; j < 10 ; j++) {
+                System.out.print(board.getBoard()[i][j] + "   ");
+            }
+        }
+        System.out.println("\n");
     }
 }

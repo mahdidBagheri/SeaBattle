@@ -22,38 +22,21 @@ public class BoardController {
     public void shuffle(){
         ///BattleShip
         locateShip('a',4);
-        printBoard();
+
         //Cruiser
         locateShip('b',3);
-        printBoard();
-
         locateShip('c',3);
-        printBoard();
 
         //Destroyer
         locateShip('d',2);
-        printBoard();
-
         locateShip('e',2);
-        printBoard();
-
         locateShip('f',2);
-        printBoard();
 
         //Frigate
         locateShip('g',1);
-        printBoard();
-
         locateShip('h',1);
-        printBoard();
-
         locateShip('i',1);
-        printBoard();
-
         locateShip('j',1);
-        printBoard();
-
-
 
         int a = 0;
 
