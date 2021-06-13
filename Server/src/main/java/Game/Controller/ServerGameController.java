@@ -74,7 +74,7 @@ public class ServerGameController {
 
 
         String sql3 = String.format("insert into \"GamesTable\"(\"UUID\",\"Player1\",\"Player2\",\"board1\",\"board2\")" +
-                        " values (uuid_generate_v4(),'%s','%s','%s',%s');",player1.getUser().getUuid(),
+                        " values (uuid_generate_v4(),'%s','%s','%s','%s');",player1.getUser().getUuid(),
                         player2.getUser().getUuid(),board1,board2);
         player1.getConnection().getConnectionToDataBase().executeUpdate(sql3);
 
@@ -85,12 +85,12 @@ public class ServerGameController {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
 
-        String createBoard1 = String.format("create table \"board%s\" (\"Cells\");",uuidString);
+        String createBoard1 = String.format("create table \"board%s\" (\"Cells\" VARCHAR ( 5 ) NOT NULL);",uuidString);
         player.getConnection().getConnectionToDataBase().executeUpdate(createBoard1);
 
         String insertToTable1;
         for(int i = 0; i < 100; i++){
-            insertToTable1 = String.format("insert into \"board%s\" (\"Cells\") values (+0);",uuidString);
+            insertToTable1 = String.format("insert into \"board%s\" (\"Cells\") values ('+0');",uuidString);
             player.getConnection().getConnectionToDataBase().executeUpdate(insertToTable1);
         }
 

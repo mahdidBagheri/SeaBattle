@@ -22,21 +22,40 @@ public class BoardController {
     public void shuffle(){
         ///BattleShip
         locateShip('a',4);
-
+        printBoard();
         //Cruiser
         locateShip('b',3);
+        printBoard();
+
         locateShip('c',3);
+        printBoard();
 
         //Destroyer
         locateShip('d',2);
+        printBoard();
+
         locateShip('e',2);
+        printBoard();
+
         locateShip('f',2);
+        printBoard();
 
         //Frigate
         locateShip('g',1);
+        printBoard();
+
         locateShip('h',1);
+        printBoard();
+
         locateShip('i',1);
+        printBoard();
+
         locateShip('j',1);
+        printBoard();
+
+
+
+        int a = 0;
 
     }
 
@@ -46,12 +65,12 @@ public class BoardController {
         int x = 0;
         int y = 0;
         do {
-            int orentation = random.nextInt(2);
-            if (orentation == 0) {
+            orientation = random.nextInt(2);
+            if (orientation == 0) {
                 //horizantal
                 x = random.nextInt(9 - length + 1);
                 y = random.nextInt(9);
-            } else if (orentation == 1) {
+            } else if (orientation == 1) {
                 //vertical
                 x = random.nextInt(9);
                 y = random.nextInt(9 - length + 1);
@@ -75,7 +94,7 @@ public class BoardController {
     private boolean isPossible(int orientation, int x, int y, int length) {
         if(orientation == 0){
             for (int i = -1; i <length+1 ; i++) {
-                for (int j = -1; j < +1; j++) {
+                for (int j = -1; j <= +1; j++) {
                     if(x+i >= 0 &&x+i<=9 && j+y>=0 && j+y<=9 ){
                         if(!board.getBoard()[y + j][x + i].equals("+0")){
                             return false;
@@ -87,9 +106,9 @@ public class BoardController {
         }
         else if(orientation == 1){
             for (int i = -1; i <length+1 ; i++) {
-                for (int j = -1; j < +1; j++) {
-                    if(x+i >= 0 &&x+i<=9 && j+y>=0 && j+y<=9 ){
-                        if(!board.getBoard()[x + i][y + j].equals("+0")){
+                for (int j = -1; j <= +1; j++) {
+                    if(x + j >= 0 &&x + j<=9 && y + i>=0 && y + i<=9 ){
+                        if(!board.getBoard()[y + i][x + j].equals("+0")){
                             return false;
                         }
                     }
@@ -98,6 +117,16 @@ public class BoardController {
             }
         }
         return true;
+    }
+
+    public void printBoard(){
+        for (int i = 0; i <10 ; i++) {
+            System.out.println("\n");
+            for (int j = 0; j <10 ; j++) {
+                System.out.print(board.getBoard()[i][j] + "   ");
+            }
+        }
+        System.out.println("\n");
     }
 
 

@@ -6,7 +6,7 @@ import Game.Model.Board;
 public class Player {
     User user;
     ServerConnection connection;
-    Board board;
+    Board board = new Board();
 
     public User getUser() {
         return user;
