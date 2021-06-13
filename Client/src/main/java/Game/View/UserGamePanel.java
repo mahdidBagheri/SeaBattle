@@ -31,7 +31,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
         this.setBackground(colorConfig.getColor03());
         this.setLayout(null);
         this.setBounds(0,0,(int)(frameConfig.getWidth()/2),(int)frameConfig.getHeight());
-
+        this.setVisible(true);
 
         findingOpponentLbl = new JLabel();
         findingOpponentLbl.setBounds(20,20,150,20);
@@ -68,9 +68,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
     }
 
-    public void setBoardPanelListener() {
-        boardPanel.setBoardPanelListener(new BoardPanelListener(userGamePanelListener));
-    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

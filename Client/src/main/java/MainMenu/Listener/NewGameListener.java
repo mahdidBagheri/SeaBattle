@@ -6,6 +6,7 @@ import Connection.Client.ClientRequest;
 import Game.Controller.GameController;
 import Game.Listener.UserGamePanelListener;
 import Game.Threads.GameThreadServerListener;
+import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
 import MainFrame.View.MainPanel;
 import MainMenu.Events.NewGameEvent;
@@ -36,19 +37,22 @@ public class NewGameListener {
         clientConnection.execute(clientRequest);
 
         UserGamePanelListener userGamePanelListener = new UserGamePanelListener(mainPanel);
+
         UserGamePanel userGamePanel = new UserGamePanel();
+        OpponentGamePanel opponentGamePanel = new OpponentGamePanel();
         userGamePanel.setUserGamePanelListener(userGamePanelListener);
-        userGamePanel.setBoardPanelListener();
 
         GameController gameController = new GameController();
         gameController.setClientConnection(clientConnection);
         gameController.setGameThreadServerListener();
         userGamePanelListener.setGameController(gameController);
-        mainPanel.addUserGamePanel(userGamePanel);
+
         gameController.setUserGamePanel(userGamePanel);
+        gameController.setOpponentGamePanel(opponentGamePanel);
 
 
-
+        mainPanel.addUserGamePanel(userGamePanel);
+        mainPanel.addOpponentGamePanel(opponentGamePanel);
 
     }
 

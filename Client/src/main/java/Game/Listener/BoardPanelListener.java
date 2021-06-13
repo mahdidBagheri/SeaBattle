@@ -1,12 +1,14 @@
 package Game.Listener;
 
+import Game.View.OpponentGamePanel;
+
 public class BoardPanelListener {
-    UserGamePanelListener userGamePanelListener;
-    public BoardPanelListener(UserGamePanelListener userGamePanelListener) {
-        this.userGamePanelListener = userGamePanelListener;
+    OpponentGamePanelListener opponentGamePanelListener;
+    public BoardPanelListener(OpponentGamePanelListener opponentGamePanelListener) {
+        this.opponentGamePanelListener = opponentGamePanelListener;
     }
 
     public void listen(int x, int y) {
-        userGamePanelListener.listen(x,y);
+        opponentGamePanelListener.listen(x,y);
     }
 }

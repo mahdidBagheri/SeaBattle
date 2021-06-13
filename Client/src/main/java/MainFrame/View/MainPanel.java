@@ -2,6 +2,7 @@ package MainFrame.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
 import Interfaces.NextPanelListener;
 import LogIn.Listener.LoginListener;
@@ -21,6 +22,7 @@ public class MainPanel extends JPanel {
     LoginPanelView loginPanelView;
     MainMenuView mainMenuView;
     UserGamePanel userGamePanel;
+    OpponentGamePanel opponentGamePanel;
 
     public MainPanel() throws IOException {
         this.setLayout(null);
@@ -83,6 +85,9 @@ public class MainPanel extends JPanel {
         if(userGamePanel != null){
             instance.remove(userGamePanel);
         }
+        if(opponentGamePanel != null){
+            instance.remove(opponentGamePanel);
+        }
 
     }
 
@@ -127,5 +132,15 @@ public class MainPanel extends JPanel {
         instance.revalidate();
         instance.repaint();
 
+    }
+
+    public void addOpponentGamePanel(OpponentGamePanel opponentGamePanel) {
+        this.opponentGamePanel = opponentGamePanel;
+
+        opponentGamePanel.setMainPanel(instance);
+        opponentGamePanel.setVisible(false);
+        instance.add(opponentGamePanel);
+        instance.revalidate();
+        instance.repaint();
     }
 }

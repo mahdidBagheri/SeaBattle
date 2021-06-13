@@ -29,6 +29,7 @@ public class GameThreadServerListener extends Thread {
                     gameController.AnswerCheckConnectionFromServer();
                 }
                 else if(serverRequest.getCommand().equals("GameData")){
+                    gameController.addOpponentGamePanel();
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
                     gameController.opponentFound();
                 }

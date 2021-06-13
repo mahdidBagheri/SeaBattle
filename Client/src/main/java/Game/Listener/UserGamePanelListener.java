@@ -11,12 +11,9 @@ public class UserGamePanelListener {
         this.mainPanel = mainPanel;
     }
 
-
-    public void listen(int x, int y) {
-        gameController.hit(x,y);
-    }
-
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+
+
 }
