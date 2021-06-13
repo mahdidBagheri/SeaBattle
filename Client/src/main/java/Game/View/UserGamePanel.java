@@ -2,7 +2,6 @@ package Game.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
-import Game.Controller.GameController;
 import Game.Listener.BoardPanelListener;
 import Game.Listener.UserGamePanelListener;
 import MainFrame.View.MainPanel;
@@ -25,7 +24,6 @@ public class UserGamePanel extends JPanel implements ActionListener {
     UserGamePanelListener userGamePanelListener;
 
     public UserGamePanel() throws IOException {
-
 
         ColorConfig colorConfig = new ColorConfig();
         FrameConfig frameConfig = new FrameConfig();
@@ -60,7 +58,6 @@ public class UserGamePanel extends JPanel implements ActionListener {
         readyBtn.setEnabled(false);
 
         boardPanel = new BoardPanel();
-        boardPanel.setBoardPanelListener(new BoardPanelListener(userGamePanelListener));
         boardPanel.setEnabled(false);
 
         this.add(findingOpponentLbl);
@@ -71,6 +68,9 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
     }
 
+    public void setBoardPanelListener() {
+        boardPanel.setBoardPanelListener(new BoardPanelListener(userGamePanelListener));
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -22,18 +22,18 @@ public class GameController {
 
     ClientConnection clientConnection;
 
-    public GameController() throws IOException {
+    public GameController() {
+    }
 
+    public void setGameThreadServerListener(){
         GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
         this.gameThreadServerListener = gameThreadServerListener;
         gameThreadServerListener.start();
-
 
     }
 
     public void setUserGamePanel(UserGamePanel userGamePanel) {
         this.userGamePanel = userGamePanel;
-        this.userGamePanel.setUserGamePanelListener(new UserGamePanelListener(this));
     }
 
     public void AnswerCheckConnectionFromServer() throws IOException {
