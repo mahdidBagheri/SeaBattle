@@ -29,17 +29,17 @@ public class GameThreadServerListener extends Thread {
                     gameController.AnswerCheckConnectionFromServer();
                 }
                 else if(serverRequest.getCommand().equals("FirstGameData")){
-                    gameController.addOpponentGamePanel();
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
                     gameController.opponentFound();
                 }
                 else if(serverRequest.getCommand().equals("GameData")){
-                    gameController.addOpponentGamePanel();
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
                 }
                 else if(serverRequest.getCommand().equals("GameStarted")){
                     gameController.start();
                     gameController.setTurn(serverRequest.getPayLoad().getStringStringHashMap().get("turn"));
+                    gameController.addOpponentGamePanel();
+
                 }
 
             } catch (CouldNotConnectToServerException e) {

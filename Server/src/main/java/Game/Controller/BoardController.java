@@ -16,7 +16,7 @@ public class BoardController {
     }
 
     public void hit(int x, int y){
-
+        board.getBoard()[y][x] = "-" + board.getBoard()[y][x].charAt(1);
     }
 
     public void shuffle(){

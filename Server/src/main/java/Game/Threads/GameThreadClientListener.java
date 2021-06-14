@@ -4,6 +4,7 @@ import Connection.Client.ClientRequest;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import Game.Controller.BoardController;
 import Game.Controller.ServerGameController;
 import User.Model.Player;
 import User.Model.User;
@@ -35,7 +36,15 @@ public class GameThreadClientListener extends Thread {
                 if(clientRequest.getSource().equals("Game")){
                     if(clientRequest.getCommand().equals("shuffle")){
                         player.setShuffle(true);
-                        serverGameController.setTimeLeft(serverGameController.getTimeLeft()+10);
+                        player.decreaseShuffleNum();
+                        serverGameController.increaseTimeLeftByShuffle(player);
+                    }
+                    else if(clientRequest.getCommand().equals("hit")){
+                        int x = Integer.parseInt(clientRequest.getClientPayLoad().getStringStringHashMap().get("X"));
+                        int y = Integer.parseInt(clientRequest.getClientPayLoad().getStringStringHashMap().get("Y"));
+                        serverGameController.hit(x,y,player);
+                        //serverGameController.switchTurn();
+                        serverGameController.sendGameData("GameData");
                     }
                 }
 

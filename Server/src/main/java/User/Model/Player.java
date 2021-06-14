@@ -11,6 +11,8 @@ public class Player {
     boolean shuffle = false;
     boolean ready = false;
 
+    int shuffleNum = 0;
+
     Board board = new Board();
 
     public User getUser() {
@@ -59,5 +61,17 @@ public class Player {
 
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+    public int getShuffleNum() {
+        return shuffleNum;
+    }
+
+    public void setShuffleNum(int shuffleNum) {
+        this.shuffleNum = shuffleNum;
+    }
+
+    public void decreaseShuffleNum(){
+        shuffleNum--;
     }
 }

@@ -1,6 +1,7 @@
 package Game.Controller;
 
 import Connection.Client.ClientConnection;
+import Connection.Client.ClientPayLoad;
 import Connection.Client.ClientRequest;
 import Game.Graphics.*;
 import Game.Listener.OpponentGamePanelListener;
@@ -63,7 +64,6 @@ public class GameController {
         //TODO change this part !
             this.board = gameData.getBoard1();
             this.opponentBoard = gameData.getBoard2();
-
         retriveBoard();
     }
 
@@ -91,8 +91,19 @@ public class GameController {
     }
 
 
-    public void hit(int x, int y) {
+    public void hit(int x, int y) throws IOException {
         System.out.println(x + " ,  " + y);
+        int Y = y/35;
+        int X = x/35;
+        if(opponentBoard.getBoard()[X][Y].charAt(0) == '+'){
+            ClientPayLoad clientPayLoad = new ClientPayLoad();
+            clientPayLoad.getStringStringHashMap().put("X",Integer.toString(X));
+            clientPayLoad.getStringStringHashMap().put("Y",Integer.toString(Y));
+            //TODO complete this
+            ClientRequest clientRequest = new ClientRequest("Game",clientPayLoad,null,"hit",null,null);
+            clientConnection.execute(clientRequest);
+        }
+
 
     }
 
@@ -111,6 +122,32 @@ public class GameController {
     public void retriveBoard() {
         clearBoard();
         retriveShips();
+        retriveHits();
+    }
+
+    private void retriveHits() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10 ; j++) {
+                if(board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) != '0'){
+                    userGamePanel.getBoardPanel().addCrosses(new Cross(j*35,i*35));
+                }
+                else if(board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) == '0'){
+                    userGamePanel.getBoardPanel().addBomb(new Bomb(j*35,i*35));
+                }
+            }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10 ; j++) {
+                if(opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) != '0'){
+                    opponentGamePanel.getBoardPanel().addCrosses(new Cross(j*35,i*35));
+                }
+                else if(opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) == '0'){
+                    opponentGamePanel.getBoardPanel().addBomb(new Bomb(j*35,i*35));
+                }
+            }
+        }
+
     }
 
     private void clearBoard() {
@@ -223,9 +260,19 @@ public class GameController {
     public void setTurn(String turn) {
         if(turn.equals("true")){
             this.turn = true;
+            opponentGamePanel.setEnabled(true);
+            opponentGamePanel.getBoardPanel().setEnabled(true);
+            opponentGamePanel.getBoardPanel().setVisible(true);
+            opponentGamePanel.getTurnLbl().setText("Your turn");
         }
         else {
             this.turn = false;
+            opponentGamePanel.getBoardPanel().setEnabled(false);
+            opponentGamePanel.getBoardPanel().setVisible(false);
+
+            opponentGamePanel.setEnabled(false);
+            opponentGamePanel.getTurnLbl().setText("opponent turn");
+
         }
         System.out.println(this.turn);
     }

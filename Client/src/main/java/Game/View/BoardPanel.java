@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class BoardPanel extends JPanel implements MouseListener {
 
@@ -30,8 +31,8 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Sprite Frigate2;
     private Sprite Frigate3;
     private Sprite Frigate4;
-
-
+    LinkedList<Bomb> bombs = new LinkedList<>();
+    LinkedList<Cross> crosses = new LinkedList<>();
 
     BoardPanelListener boardPanelListener;
 
@@ -68,7 +69,7 @@ public class BoardPanel extends JPanel implements MouseListener {
     public void mousePressed(MouseEvent e) {
         try {
             boardPanelListener.listen(e.getX(), e.getY());
-        }catch (NullPointerException nullPointerException){
+        }catch (NullPointerException | IOException nullPointerException){
 
         }
     }
@@ -135,6 +136,12 @@ public class BoardPanel extends JPanel implements MouseListener {
         }
         if(Frigate4 != null){
             Frigate4.draw(g2D);
+        }
+        for(Bomb bomb:bombs){
+            bomb.draw(g2D);
+        }
+        for(Cross cross:crosses){
+            cross.draw(g2D);
         }
 
     }
@@ -231,5 +238,17 @@ public class BoardPanel extends JPanel implements MouseListener {
         Frigate2 = null;
         Frigate3 = null;
         Frigate4 = null;
+        bombs = new LinkedList<>();
+        crosses = new LinkedList<>();
+    }
+
+    public void addBomb(Bomb bomb){
+        bombs.add(bomb);
+        repaint();
+    }
+
+    public void addCrosses(Cross cross){
+        crosses.add(cross);
+        repaint();
     }
 }

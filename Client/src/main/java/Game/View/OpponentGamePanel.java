@@ -19,7 +19,7 @@ import java.io.IOException;
 public class OpponentGamePanel extends JPanel {
     MainPanel mainPanel;
 
-    JLabel timerLbl;
+    JLabel turnLbl;
 
     BoardPanel boardPanel;
 
@@ -34,15 +34,15 @@ public class OpponentGamePanel extends JPanel {
         this.setLayout(null);
         this.setBounds((int)(frameConfig.getWidth()/2),0,(int)(frameConfig.getWidth()/2),(int)frameConfig.getHeight());
 
-        timerLbl = new JLabel();
-        timerLbl.setBounds(250,20,150,20);
-        timerLbl.setText("00:00");
-        timerLbl.setVisible(true);
+        turnLbl = new JLabel();
+        turnLbl.setBounds(250,20,150,20);
+        turnLbl.setText("00:00");
+        turnLbl.setVisible(true);
 
         boardPanel = new BoardPanel();
         boardPanel.setEnabled(false);
 
-        this.add(timerLbl);
+        this.add(turnLbl);
         this.add(boardPanel);
 
 
@@ -58,8 +58,8 @@ public class OpponentGamePanel extends JPanel {
     }
 
 
-    public JLabel getTimerLbl() {
-        return timerLbl;
+    public JLabel getTurnLbl() {
+        return turnLbl;
     }
 
     public BoardPanel getBoardPanel() {

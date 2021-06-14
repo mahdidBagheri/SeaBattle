@@ -85,7 +85,12 @@ public class ServerGameController {
 
             modifyBoardDataForOpponent(opponent, player2.getBoard());
 
-            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),(int)timeLeft);
+            if(turn == player1){
+                gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),"true",(int)timeLeft);
+            }
+            else {
+                gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),"false",(int)timeLeft);
+            }
         }
         else if(player == player2){
             Player selfPlayer = player2;
@@ -95,8 +100,12 @@ public class ServerGameController {
             opponent.setUser(userOpponent);
 
             modifyBoardDataForOpponent(opponent, player1.getBoard());
-
-            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),(int)timeLeft);
+            if(turn == player2){
+                gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),"true",(int)timeLeft);
+            }
+            else {
+                gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),"false",(int)timeLeft);
+            }
 
         }
         else {
@@ -115,6 +124,9 @@ public class ServerGameController {
             for (int j = 0; j < 10 ; j++) {
                 if(board.getBoard()[i][j].charAt(0) == '+'){
                     opponent.getBoard().getBoard()[i][j] = "+0";
+                }
+                if(board.getBoard()[i][j].charAt(0) == '-'){
+                    opponent.getBoard().getBoard()[i][j] = board.getBoard()[i][j];
                 }
             }
         }
@@ -212,7 +224,12 @@ public class ServerGameController {
 
     public void sendGameStartMessage(Player player) throws IOException {
         ServerPayLoad payLoad = new ServerPayLoad();
-        payLoad.getStringStringHashMap().put("turn",turn.getUser().getUsername().equals(player.getUser().getUsername()) ? "true" : "false");
+        if(player == turn){
+            payLoad.getStringStringHashMap().put("turn","true");
+        }
+        else {
+            payLoad.getStringStringHashMap().put("turn","false");
+        }
         ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"GameStarted",payLoad);
         player.getConnection().execute(serverRequest);
     }
@@ -223,5 +240,40 @@ public class ServerGameController {
 
     public void setTimeLeft(double timeLeft) {
         this.timeLeft = timeLeft;
+    }
+
+    public void switchTurn(){
+        if(turn == player1){
+            turn = player2;
+        }
+        else if(turn == player2){
+            turn = player1;
+        }
+    }
+
+    public void increaseTimeLeftByShuffle(Player player) {
+        if(player == player1){
+            if(player1.getShuffleNum() >= player2.getShuffleNum()){
+                timeLeft += 10;
+            }
+
+        }
+        else if(player == player2){
+            if(player2.getShuffleNum() >= player1.getShuffleNum()){
+                timeLeft += 10;
+            }
+        }
+    }
+
+    public void hit(int x, int y, Player player) {
+        BoardController boardController = null;
+        if(player == player1){
+            boardController = new BoardController(player2.getBoard());
+        }
+        else if(player == player2) {
+            boardController = new BoardController(player1.getBoard());
+        }
+
+        boardController.hit(x,y);
     }
 }
