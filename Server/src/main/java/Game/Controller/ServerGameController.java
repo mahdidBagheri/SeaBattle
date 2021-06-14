@@ -28,6 +28,8 @@ public class ServerGameController {
     int timeLeft;
     GameData gameData;
 
+
+
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
         this.player1 = new Player();
         this.player1.setUser(user);
@@ -50,7 +52,7 @@ public class ServerGameController {
         }
     }
 
-    public void initialize() throws NotAvailableUserException, IOException, CouldNotConnectToServerException, ClassNotFoundException, SQLException {
+    public void initialize() throws NotAvailableUserException, IOException, CouldNotConnectToServerException, ClassNotFoundException, SQLException, InterruptedException {
         boolean isBothAreAvailable = checkUsersAvailability();
         if(!isBothAreAvailable){
             throw new NotAvailableUserException("User not available");
@@ -62,15 +64,11 @@ public class ServerGameController {
         shuffleBoards();
 
         sendGameData();
-        startTimer();
         int a = 0;
 
     }
 
-    private void startTimer() {
-    }
-
-    private void sendGameData() throws IOException {
+    public void sendGameData() throws IOException {
         sendGameDataToUser(player1);
         sendGameDataToUser(player2);
 

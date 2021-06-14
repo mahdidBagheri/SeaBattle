@@ -34,7 +34,9 @@ public class ServerGameListener {
             ServerGameController serverGameController = checkForGameWaitingForUserToJoin();
             if(serverGameController != null){
                 serverGameController.joinGame(serverConnection,user);
-                serverGameController.startGame();
+                synchronized (onlineGames){
+                    onlineGames.wait();
+                }
                 serverGameController.user2StartListening();
 
             }
@@ -44,6 +46,10 @@ public class ServerGameListener {
                 boolean shouldStart = newServerGameController.waitForOtherUserToJoin();
                 if(shouldStart){
                     newServerGameController.initialize();
+                    synchronized (onlineGames){
+                        onlineGames.notify();
+                    }
+                    newServerGameController.startGame();
                     newServerGameController.user1StartListening();
                 }
                 else {

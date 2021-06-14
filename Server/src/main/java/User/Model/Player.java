@@ -7,6 +7,10 @@ public class Player {
     User user;
     ServerConnection connection;
 
+    boolean back = false;
+    boolean shuffle = false;
+    boolean ready = false;
+
     Board board = new Board();
 
     public User getUser() {
@@ -31,5 +35,29 @@ public class Player {
 
     public void setConnection(ServerConnection connection) {
         this.connection = connection;
+    }
+
+    public boolean isBack() {
+        return back;
+    }
+
+    public void setBack(boolean back) {
+        this.back = back;
+    }
+
+    public boolean isShuffle() {
+        return shuffle;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 }

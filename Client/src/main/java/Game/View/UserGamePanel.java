@@ -76,7 +76,11 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
         }
         if(e.getSource() == shuffleBtn){
-
+            try {
+                userGamePanelListener.shuffle();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
 
     }

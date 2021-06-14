@@ -3,6 +3,8 @@ package Game.Listener;
 import Game.Controller.GameController;
 import MainFrame.View.MainPanel;
 
+import java.io.IOException;
+
 public class UserGamePanelListener {
     GameController gameController;
     MainPanel mainPanel;
@@ -16,4 +18,7 @@ public class UserGamePanelListener {
     }
 
 
+    public void shuffle() throws IOException {
+        gameController.shuffleBoard();
+    }
 }

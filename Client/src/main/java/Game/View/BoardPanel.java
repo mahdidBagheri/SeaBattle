@@ -214,4 +214,22 @@ public class BoardPanel extends JPanel implements MouseListener {
         this.repaint();
     }
 
+    public void clear() {
+        HBattleShip = null;
+        VBattleShip = null;
+        HCruiser1 = null;
+        HCruiser2 = null;
+        VCruiser1 = null;
+        VCruiser2 = null;
+        HDestroyer1 = null;
+        HDestroyer2 = null;
+        HDestroyer3 = null;
+        VDestroyer1 = null;
+        VDestroyer2 = null;
+        VDestroyer3 = null;
+        Frigate1 = null;
+        Frigate2 = null;
+        Frigate3 = null;
+        Frigate4 = null;
+    }
 }

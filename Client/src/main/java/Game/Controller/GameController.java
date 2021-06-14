@@ -104,7 +104,12 @@ public class GameController {
     }
 
     public void retriveBoard() {
+        clearBoard();
         retriveShips();
+    }
+
+    private void clearBoard() {
+        userGamePanel.getBoardPanel().clear();
     }
 
     private void retriveShips() {
@@ -195,5 +200,11 @@ public class GameController {
 
 
         return data;
+    }
+
+    public void shuffleBoard() throws IOException {
+        //TODO modify!
+        ClientRequest clientRequest = new ClientRequest("Game",null,null,"shuffle",null,null);
+        clientConnection.execute(clientRequest);
     }
 }

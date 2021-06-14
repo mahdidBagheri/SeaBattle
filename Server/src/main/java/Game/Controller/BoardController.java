@@ -20,6 +20,7 @@ public class BoardController {
     }
 
     public void shuffle(){
+        clear();
         ///BattleShip
         locateShip('a',4);
 
@@ -40,6 +41,14 @@ public class BoardController {
 
         int a = 0;
 
+    }
+
+    private void clear() {
+        for (int i = 0; i <10 ; i++) {
+            for (int j = 0; j <10 ; j++) {
+                board.getBoard()[i][j] = "+0";
+            }
+        }
     }
 
     private void locateShip(Character symbol, int length) {
@@ -113,4 +122,7 @@ public class BoardController {
     }
 
 
+    public void saveBoard() {
+
+    }
 }
