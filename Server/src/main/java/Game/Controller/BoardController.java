@@ -60,12 +60,12 @@ public class BoardController {
             orientation = random.nextInt(2);
             if (orientation == 0) {
                 //horizantal
-                x = random.nextInt(9 - length + 1);
-                y = random.nextInt(9);
+                x = random.nextInt(10 - length + 1);
+                y = random.nextInt(10);
             } else if (orientation == 1) {
                 //vertical
-                x = random.nextInt(9);
-                y = random.nextInt(9 - length + 1);
+                x = random.nextInt(10);
+                y = random.nextInt(10 - length + 1);
             }
         }while (!isPossible(orientation, x, y, length));
 

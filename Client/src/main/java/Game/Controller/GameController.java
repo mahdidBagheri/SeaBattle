@@ -162,21 +162,21 @@ public class GameController {
                 if (board.getBoard()[i][j].charAt(1) == symbol) {
                     x = j;
                     y = i;
-                    if (board.getBoard()[i + 1][j].charAt(1) == symbol) {
+                    if ( i + 1 <= 9 && board.getBoard()[i + 1][j].charAt(1) == symbol) {
                         orientation = 1;
 
                         length++;
                         int l = 0;
-                        while (board.getBoard()[i + l][j].charAt(1) == symbol) {
+                        while ( i + l <= 9 && board.getBoard()[i + l][j].charAt(1) == symbol) {
                             length++;
                             l++;
                         }
                         break;
-                    } else if (board.getBoard()[i][j + 1].charAt(1) == symbol) {
+                    } else if (j + 1 <= 9 && board.getBoard()[i][j + 1].charAt(1) == symbol) {
                         orientation = 0;
                         length++;
                         int l = 0;
-                        while (board.getBoard()[i][j + l].charAt(1) == symbol) {
+                        while (j + l <= 9 && board.getBoard()[i][j + l].charAt(1) == symbol ) {
                             length++;
                             l++;
                         }
