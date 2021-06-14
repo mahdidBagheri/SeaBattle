@@ -25,6 +25,10 @@ public class GameController {
     Board board;
     Board opponentBoard;
 
+    boolean turn = false;
+
+    double remaingTime = 0;
+
     public void setGameThreadServerListener() {
         GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
         this.gameThreadServerListener = gameThreadServerListener;
@@ -81,6 +85,7 @@ public class GameController {
         userGamePanel.getShuffleBtn().setEnabled(true);
         opponentGamePanel.setVisible(true);
         opponentGamePanel.getBoardPanel().setEnabled(true);
+        timer(30);
         userGamePanel.repaint();
         opponentGamePanel.repaint();
     }
@@ -206,5 +211,45 @@ public class GameController {
         //TODO modify!
         ClientRequest clientRequest = new ClientRequest("Game",null,null,"shuffle",null,null);
         clientConnection.execute(clientRequest);
+        remaingTime += 10;
+    }
+
+    public void start() {
+        System.out.println("game started");
+        userGamePanel.getShuffleBtn().setVisible(false);
+
+    }
+
+    public void setTurn(String turn) {
+        if(turn.equals("true")){
+            this.turn = true;
+        }
+        else {
+            this.turn = false;
+        }
+        System.out.println(this.turn);
+    }
+    public void timer(double t){
+        remaingTime = t;
+        Thread timeThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (remaingTime > 0){
+                    try {
+                        Thread.sleep(100);
+                        remaingTime -= 0.1;
+                        userGamePanel.getTimerLbl().setText(Integer.toString((int)remaingTime));
+                        userGamePanel.repaint();
+
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        timeThread.start();
+
     }
 }

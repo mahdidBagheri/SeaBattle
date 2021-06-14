@@ -14,7 +14,7 @@ public class ServerGameThread extends Thread {
     @Override
     public void run() {
         try {
-            startTimer(30);
+            startTimer();
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         } catch (IOException e) {
@@ -23,11 +23,16 @@ public class ServerGameThread extends Thread {
     }
 
 
-    private void startTimer(int sec) throws InterruptedException, IOException {
-        while ( sec > 0){
+    private void startTimer() throws InterruptedException, IOException {
+        while ( serverGameController.getTimeLeft() > 0){
 
             Thread.sleep(100);
+            serverGameController.setTimeLeft(serverGameController.getTimeLeft()-0.1);
+
             if(serverGameController.getPlayer1().isReady() && serverGameController.getPlayer2().isReady()){
+                serverGameController.sendGameStartMessage(serverGameController.getPlayer1());
+                serverGameController.sendGameStartMessage(serverGameController.getPlayer2());
+
                 break;
             }
             if(serverGameController.getPlayer1().isReady()){
@@ -41,7 +46,7 @@ public class ServerGameThread extends Thread {
                 BoardController boardController = new BoardController(serverGameController.getPlayer1().getBoard());
                 boardController.shuffle();
                 boardController.saveBoard();
-                serverGameController.sendGameData();
+                serverGameController.sendGameData("GameData");
             }
             if(serverGameController.getPlayer2().isShuffle()){
                 serverGameController.getPlayer2().setShuffle(false);
@@ -49,7 +54,7 @@ public class ServerGameThread extends Thread {
                 boardController.shuffle();
                 //TODO implement saveBoard
                 boardController.saveBoard();
-                serverGameController.sendGameData();
+                serverGameController.sendGameData("GameData");
             }
             if(serverGameController.getPlayer1().isBack()){
 
@@ -59,6 +64,11 @@ public class ServerGameThread extends Thread {
             }
 
 
+
+        }
+        if(serverGameController.getTimeLeft() <= 0){
+            serverGameController.sendGameStartMessage(serverGameController.getPlayer1());
+            serverGameController.sendGameStartMessage(serverGameController.getPlayer2());
 
         }
     }

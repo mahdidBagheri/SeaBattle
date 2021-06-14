@@ -4,6 +4,7 @@ import Connection.Client.ClientRequest;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
+import Game.Controller.ServerGameController;
 import User.Model.Player;
 import User.Model.User;
 
@@ -11,9 +12,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class GameThreadClientListener extends Thread {
+    ServerGameController serverGameController;
     Player player;
 
-    public GameThreadClientListener(Player player) {
+    public GameThreadClientListener(ServerGameController serverGameController, Player player) {
+        this.serverGameController = serverGameController;
         this.player = player;
     }
 
@@ -32,6 +35,7 @@ public class GameThreadClientListener extends Thread {
                 if(clientRequest.getSource().equals("Game")){
                     if(clientRequest.getCommand().equals("shuffle")){
                         player.setShuffle(true);
+                        serverGameController.setTimeLeft(serverGameController.getTimeLeft()+10);
                     }
                 }
 

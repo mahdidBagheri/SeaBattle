@@ -2,7 +2,6 @@ package Game.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
-import Game.Listener.BoardPanelListener;
 import Game.Listener.UserGamePanelListener;
 import MainFrame.View.MainPanel;
 
@@ -22,6 +21,8 @@ public class UserGamePanel extends JPanel implements ActionListener {
     BoardPanel boardPanel;
 
     UserGamePanelListener userGamePanelListener;
+
+    int remainShuffles = 3;
 
     public UserGamePanel() throws IOException {
 
@@ -76,6 +77,10 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
         }
         if(e.getSource() == shuffleBtn){
+            remainShuffles--;
+            if(remainShuffles <= 0){
+                shuffleBtn.setEnabled(false);
+            }
             try {
                 userGamePanelListener.shuffle();
             } catch (IOException ioException) {

@@ -25,8 +25,7 @@ public class ServerGameController {
     boolean continueWaitingForUserToJoin = true;
 
     Player turn;
-    int timeLeft;
-    GameData gameData;
+    double timeLeft;
 
 
 
@@ -63,18 +62,18 @@ public class ServerGameController {
         insertGameToDataBase();
         shuffleBoards();
 
-        sendGameData();
+        sendGameData("FirstGameData");
         int a = 0;
 
     }
 
-    public void sendGameData() throws IOException {
-        sendGameDataToUser(player1);
-        sendGameDataToUser(player2);
+    public void sendGameData(String command) throws IOException {
+        sendGameDataToUser(player1, command);
+        sendGameDataToUser(player2, command);
 
     }
 
-    private void sendGameDataToUser(Player player) throws IOException {
+    private void sendGameDataToUser(Player player, String command) throws IOException {
         ServerPayLoad serverPayLoad = new ServerPayLoad();
         GameData gameData = null;
         if(player == player1){
@@ -86,7 +85,7 @@ public class ServerGameController {
 
             modifyBoardDataForOpponent(opponent, player2.getBoard());
 
-            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),timeLeft);
+            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),(int)timeLeft);
         }
         else if(player == player2){
             Player selfPlayer = player2;
@@ -97,7 +96,7 @@ public class ServerGameController {
 
             modifyBoardDataForOpponent(opponent, player1.getBoard());
 
-            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),timeLeft);
+            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),(int)timeLeft);
 
         }
         else {
@@ -106,7 +105,7 @@ public class ServerGameController {
         serverPayLoad.setGameData(gameData);
 
         serverPayLoad.setGameData(gameData);
-        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"GameData",serverPayLoad);
+        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),command,serverPayLoad);
         player.getConnection().execute(serverRequest);
     }
 
@@ -198,14 +197,31 @@ public class ServerGameController {
     }
 
     public void user1StartListening() {
-        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(player1);
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(this,player1);
         gameThreadClientListener.run();
     }
 
     public void user2StartListening() {
-        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(player2);
+        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(this,player2);
         gameThreadClientListener.run();
     }
 
+    public Player getTurn() {
+        return turn;
+    }
 
+    public void sendGameStartMessage(Player player) throws IOException {
+        ServerPayLoad payLoad = new ServerPayLoad();
+        payLoad.getStringStringHashMap().put("turn",turn.getUser().getUsername().equals(player.getUser().getUsername()) ? "true" : "false");
+        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"GameStarted",payLoad);
+        player.getConnection().execute(serverRequest);
+    }
+
+    public double getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(double timeLeft) {
+        this.timeLeft = timeLeft;
+    }
 }
