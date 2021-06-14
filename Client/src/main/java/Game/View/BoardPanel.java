@@ -20,6 +20,18 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Sprite HCruiser2;
     private Sprite VCruiser1;
     private Sprite VCruiser2;
+    private Sprite HDestroyer1;
+    private Sprite HDestroyer2;
+    private Sprite HDestroyer3;
+    private Sprite VDestroyer1;
+    private Sprite VDestroyer2;
+    private Sprite VDestroyer3;
+    private Sprite Frigate1;
+    private Sprite Frigate2;
+    private Sprite Frigate3;
+    private Sprite Frigate4;
+
+
 
     BoardPanelListener boardPanelListener;
 
@@ -94,6 +106,37 @@ public class BoardPanel extends JPanel implements MouseListener {
         if(HCruiser2 != null){
             HCruiser2.draw(g2D);
         }
+        if(HDestroyer1 != null){
+            HDestroyer1.draw(g2D);
+        }
+        if(HDestroyer2 != null){
+            HDestroyer2.draw(g2D);
+        }
+        if(HDestroyer3 != null){
+            HDestroyer3.draw(g2D);
+        }
+        if(VDestroyer1 != null){
+            VDestroyer1.draw(g2D);
+        }
+        if(VDestroyer2 != null){
+            VDestroyer2.draw(g2D);
+        }
+        if(VDestroyer3 != null){
+            VDestroyer3.draw(g2D);
+        }
+        if(Frigate1 != null){
+            Frigate1.draw(g2D);
+        }
+        if(Frigate2 != null){
+            Frigate2.draw(g2D);
+        }
+        if(Frigate3 != null){
+            Frigate3.draw(g2D);
+        }
+        if(Frigate4 != null){
+            Frigate4.draw(g2D);
+        }
+
     }
 
     public void setBoardPanelListener(BoardPanelListener boardPanelListener) {
@@ -128,4 +171,47 @@ public class BoardPanel extends JPanel implements MouseListener {
             this.VCruiser2 = vCruiser;
         }        this.repaint();
     }
+
+    public void setHDestroyer(HDestroyer hDestroyer) {
+        if(HDestroyer1 == null){
+            this.HDestroyer1 = hDestroyer;
+        }
+        else if(HDestroyer2 == null) {
+            this.HDestroyer2 = hDestroyer;
+        }
+        else if(HDestroyer3 == null) {
+            this.HDestroyer3 = hDestroyer;
+        }
+        this.repaint();
+    }
+
+    public void setVDestroyer(VDestroyer vDestroyer) {
+        if(VDestroyer1 == null){
+            this.VDestroyer1 = vDestroyer;
+        }
+        else if(VDestroyer2 == null) {
+            this.VDestroyer2 = vDestroyer;
+        }
+        else if(VDestroyer3 == null) {
+            this.VDestroyer3 = vDestroyer;
+        }
+        this.repaint();
+    }
+
+    public void setFrigate(Frigate frigate) {
+        if(Frigate1 == null){
+            this.Frigate1 = frigate;
+        }
+        else if(Frigate2 == null) {
+            this.Frigate2 = frigate;
+        }
+        else if(Frigate3 == null) {
+            this.Frigate3 = frigate;
+        }
+        else if(Frigate4 == null) {
+            this.Frigate4 = frigate;
+        }
+        this.repaint();
+    }
+
 }

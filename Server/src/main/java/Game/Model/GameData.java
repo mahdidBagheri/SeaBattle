@@ -11,10 +11,10 @@ public class GameData implements Serializable {
     User user2;
     Board board2;
 
-    User turn;
+    String turn;
     int timeLeft;
 
-    public GameData(User user1, Board board1, User user2, Board board2, User turn, int timeLeft) {
+    public GameData(User user1, Board board1, User user2, Board board2, String turn, int timeLeft) {
         this.user1 = user1;
         this.board1 = board1;
         this.user2 = user2;
@@ -55,11 +55,11 @@ public class GameData implements Serializable {
         this.board2 = board2;
     }
 
-    public User getTurn() {
+    public String getTurn() {
         return turn;
     }
 
-    public void setTurn(User turn) {
+    public void setTurn(String turn) {
         this.turn = turn;
     }
 

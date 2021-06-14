@@ -1,17 +1,11 @@
 package Game.Controller;
 
-import Config.NetWorkConfig.NetworkConfig;
 import Connection.Client.ClientConnection;
 import Connection.Client.ClientRequest;
-import Game.Graphics.HBattleShip;
-import Game.Graphics.HCruiser;
-import Game.Graphics.VBattleShip;
-import Game.Graphics.VCruiser;
+import Game.Graphics.*;
 import Game.Listener.OpponentGamePanelListener;
-import Game.Listener.UserGamePanelListener;
 import Game.Model.Board;
 import Game.Model.GameData;
-import Game.Threads.GameThreadServerExecuter;
 import Game.Threads.GameThreadServerListener;
 import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
@@ -31,7 +25,7 @@ public class GameController {
     Board board;
     Board opponentBoard;
 
-    public void setGameThreadServerListener(){
+    public void setGameThreadServerListener() {
         GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
         this.gameThreadServerListener = gameThreadServerListener;
         gameThreadServerListener.start();
@@ -43,10 +37,10 @@ public class GameController {
     }
 
     public void AnswerCheckConnectionFromServer() throws IOException {
-        HashMap<String,String> userInfo = UserInfoHandler.loadInfo();
+        HashMap<String, String> userInfo = UserInfoHandler.loadInfo();
 
         ClientRequest clientRequest = new ClientRequest("newGame", null,
-                userInfo.get("session"),"true",userInfo.get("username"),userInfo.get("password"));
+                userInfo.get("session"), "true", userInfo.get("username"), userInfo.get("password"));
 
         clientConnection.execute(clientRequest);
     }
@@ -63,24 +57,16 @@ public class GameController {
         printBoard(gameData.getBoard1());
 
         //TODO change this part !
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("enter client user name");
-        if(gameData.getUser1().getUsername().equals(scanner.nextLine())){
             this.board = gameData.getBoard1();
             this.opponentBoard = gameData.getBoard2();
-        }
-        else {
-            this.board = gameData.getBoard2();
-            this.opponentBoard =  gameData.getBoard1();;
-        }
 
         retriveBoard();
     }
 
-    public void printBoard(Board board){
+    public void printBoard(Board board) {
         for (int i = 0; i < 10; i++) {
             System.out.println("\n");
-            for (int j = 0; j < 10 ; j++) {
+            for (int j = 0; j < 10; j++) {
                 System.out.print(board.getBoard()[i][j] + "   ");
             }
         }
@@ -117,7 +103,7 @@ public class GameController {
         this.opponentGamePanel = opponentGamePanel;
     }
 
-    public void retriveBoard(){
+    public void retriveBoard() {
         retriveShips();
     }
 
@@ -136,21 +122,26 @@ public class GameController {
 
     private void retriveShip(char symbol) {
         int[] shipData = retriveShipData(symbol);
-        if(symbol == 'a'){
-            if(shipData[0] == 0){
-                userGamePanel.getBoardPanel().setHBattleShip(new HBattleShip(shipData[2],shipData[3])) ;
+        if (symbol == 'a') {
+            if (shipData[0] == 0) {
+                userGamePanel.getBoardPanel().setHBattleShip(new HBattleShip(shipData[2], shipData[3]));
+            } else if (shipData[0] == 1) {
+                userGamePanel.getBoardPanel().setVBattleShip(new VBattleShip(shipData[2], shipData[3]));
             }
-            else if(shipData[0] == 1){
-                userGamePanel.getBoardPanel().setVBattleShip(new VBattleShip(shipData[2],shipData[3])) ;
+        } else if (symbol == 'b' || symbol == 'c') {
+            if (shipData[0] == 0) {
+                userGamePanel.getBoardPanel().setHCruiser(new HCruiser(shipData[2], shipData[3]));
+            } else if (shipData[0] == 1) {
+                userGamePanel.getBoardPanel().setVCruiser(new VCruiser(shipData[2], shipData[3]));
             }
-        }
-        else if(symbol == 'b' || symbol == 'c' ){
-            if(shipData[0] == 0){
-                userGamePanel.getBoardPanel().setHCruiser(new HCruiser(shipData[2],shipData[3])) ;
+        } else if (symbol == 'd' || symbol == 'e' || symbol == 'f') {
+            if (shipData[0] == 0) {
+                userGamePanel.getBoardPanel().setHDestroyer(new HDestroyer(shipData[2], shipData[3]));
+            } else if (shipData[0] == 1) {
+                userGamePanel.getBoardPanel().setVDestroyer(new VDestroyer(shipData[2], shipData[3]));
             }
-            else if(shipData[0] == 1){
-                userGamePanel.getBoardPanel().setVCruiser(new VCruiser(shipData[2],shipData[3])) ;
-            }
+        } else if (symbol == 'g' || symbol == 'h' || symbol == 'i' || symbol == 'j') {
+            userGamePanel.getBoardPanel().setFrigate(new Frigate(shipData[2], shipData[3]));
         }
     }
 
@@ -161,48 +152,46 @@ public class GameController {
         int x = 0;
         int y = 0;
 
-        for (int i = 0; i <10 ; i++) {
-            for (int j = 0; j <10 ; j++) {
-                if(board.getBoard()[i][j].charAt(1) == symbol){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (board.getBoard()[i][j].charAt(1) == symbol) {
                     x = j;
                     y = i;
-                    if(board.getBoard()[i+1][j].charAt(1) == symbol){
+                    if (board.getBoard()[i + 1][j].charAt(1) == symbol) {
                         orientation = 1;
 
                         length++;
                         int l = 0;
-                        while (board.getBoard()[i+l][j].charAt(1) == symbol){
+                        while (board.getBoard()[i + l][j].charAt(1) == symbol) {
                             length++;
                             l++;
                         }
                         break;
-                    }
-                    else if(board.getBoard()[i][j+1].charAt(1) == symbol){
+                    } else if (board.getBoard()[i][j + 1].charAt(1) == symbol) {
                         orientation = 0;
                         length++;
                         int l = 0;
-                        while (board.getBoard()[i][j+l].charAt(1) == symbol){
+                        while (board.getBoard()[i][j + l].charAt(1) == symbol) {
                             length++;
                             l++;
                         }
                         break;
-                    }
-                    else {
+                    } else {
                         orientation = 0;
                         length++;
                         break;
                     }
                 }
             }
-            if(orientation != -1){
+            if (orientation != -1) {
                 break;
             }
         }
         int[] data = new int[4];
         data[0] = orientation;
         data[1] = length;
-        data[2] = x*35;
-        data[3] = y*35;
+        data[2] = x * 35;
+        data[3] = y * 35;
 
 
         return data;

@@ -24,6 +24,8 @@ public class ServerGameController {
 
     boolean continueWaitingForUserToJoin = true;
 
+    Player turn;
+    int timeLeft;
     GameData gameData;
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
@@ -54,6 +56,8 @@ public class ServerGameController {
             throw new NotAvailableUserException("User not available");
         }
 
+        turn = player1;
+        timeLeft = 30;
         insertGameToDataBase();
         shuffleBoards();
 
@@ -67,18 +71,58 @@ public class ServerGameController {
     }
 
     private void sendGameData() throws IOException {
-        updateGameData();
+        sendGameDataToUser(player1);
+        sendGameDataToUser(player2);
+
+    }
+
+    private void sendGameDataToUser(Player player) throws IOException {
         ServerPayLoad serverPayLoad = new ServerPayLoad();
+        GameData gameData = null;
+        if(player == player1){
+            Player selfPlayer = player1;
+            Player opponent = new Player();
+            User userOpponent = new User();
+            userOpponent.setUsername(player2.getUser().getUsername());
+            opponent.setUser(userOpponent);
+
+            modifyBoardDataForOpponent(opponent, player2.getBoard());
+
+            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),timeLeft);
+        }
+        else if(player == player2){
+            Player selfPlayer = player2;
+            Player opponent = new Player();
+            User userOpponent = new User();
+            userOpponent.setUsername(player1.getUser().getUsername());
+            opponent.setUser(userOpponent);
+
+            modifyBoardDataForOpponent(opponent, player1.getBoard());
+
+            gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),turn.getUser().getUsername(),timeLeft);
+
+        }
+        else {
+            System.out.println("sth some where went wrong");
+        }
         serverPayLoad.setGameData(gameData);
-        ServerRequest serverRequest = new ServerRequest(player1.getUser().getUsername(),"GameData",serverPayLoad);
-        player1.getConnection().execute(serverRequest);
-        player2.getConnection().execute(serverRequest);
 
+        serverPayLoad.setGameData(gameData);
+        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"GameData",serverPayLoad);
+        player.getConnection().execute(serverRequest);
     }
 
-    private void updateGameData() {
-        this.gameData = new GameData(player1.getUser(), player1.getBoard(), player2.getUser(), player2.getBoard(), player1.getUser(),30);
+
+    private void modifyBoardDataForOpponent(Player opponent, Board board) {
+        for (int i = 0; i < 10 ; i++) {
+            for (int j = 0; j < 10 ; j++) {
+                if(board.getBoard()[i][j].charAt(0) == '+'){
+                    opponent.getBoard().getBoard()[i][j] = "+0";
+                }
+            }
+        }
     }
+
 
     private void shuffleBoards() {
         shuffleBoard(player1);
