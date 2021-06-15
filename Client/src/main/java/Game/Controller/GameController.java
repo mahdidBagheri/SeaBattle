@@ -95,13 +95,16 @@ public class GameController {
         System.out.println(x + " ,  " + y);
         int Y = y/35;
         int X = x/35;
-        if(opponentBoard.getBoard()[X][Y].charAt(0) == '+'){
+        if(opponentBoard.getBoard()[Y][X].charAt(0) == '+'){
             ClientPayLoad clientPayLoad = new ClientPayLoad();
             clientPayLoad.getStringStringHashMap().put("X",Integer.toString(X));
             clientPayLoad.getStringStringHashMap().put("Y",Integer.toString(Y));
             //TODO complete this
             ClientRequest clientRequest = new ClientRequest("Game",clientPayLoad,null,"hit",null,null);
             clientConnection.execute(clientRequest);
+        }
+        else if(opponentBoard.getBoard()[Y][X].charAt(0) == '-'){
+            retriveBoard();
         }
 
 
@@ -123,6 +126,8 @@ public class GameController {
         clearBoard();
         retriveShips();
         retriveHits();
+        userGamePanel.repaint();
+        opponentGamePanel.repaint();
     }
 
     private void retriveHits() {
@@ -152,6 +157,7 @@ public class GameController {
 
     private void clearBoard() {
         userGamePanel.getBoardPanel().clear();
+        opponentGamePanel.getBoardPanel().clear();
     }
 
     private void retriveShips() {

@@ -8,7 +8,7 @@ public class Cross extends Sprite {
 
     public Cross(int x, int y) {
         super(x, y);
-        this.image = new ImageIcon("..\\SeaBattle\\Client\\src\\main\\resources\\pics\\cross.png").getImage();
+        this.image = new ImageIcon("..\\SeaBattle\\Client\\src\\main\\resources\\pics\\cross1.png").getImage();
     }
 
     @Override
