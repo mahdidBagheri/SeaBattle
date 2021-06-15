@@ -12,8 +12,19 @@ public class Player {
     boolean ready = false;
 
     int shuffleNum = 0;
+    boolean isWinner= false;
+    boolean isHited = false;
+    boolean opponentReadyMessageSent = false;
 
     Board board = new Board();
+
+    public boolean isWinner() {
+        return isWinner;
+    }
+
+    public void setWinner(boolean winner) {
+        isWinner = winner;
+    }
 
     public User getUser() {
         return user;
@@ -73,5 +84,21 @@ public class Player {
 
     public void decreaseShuffleNum(){
         shuffleNum--;
+    }
+
+    public boolean isHited() {
+        return isHited;
+    }
+
+    public void setHited(boolean hited) {
+        isHited = hited;
+    }
+
+    public boolean isOpponentReadyMessageSent() {
+        return opponentReadyMessageSent;
+    }
+
+    public void setOpponentReadyMessageSent(boolean opponentReadyMessageSent) {
+        this.opponentReadyMessageSent = opponentReadyMessageSent;
     }
 }

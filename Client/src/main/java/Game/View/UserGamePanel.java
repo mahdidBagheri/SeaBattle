@@ -74,7 +74,12 @@ public class UserGamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == readyBtn){
-
+            try {
+                userGamePanelListener.ready();
+                readyBtn.setEnabled(false);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
         if(e.getSource() == shuffleBtn){
             remainShuffles--;

@@ -25,9 +25,8 @@ public class ServerGameController {
     boolean continueWaitingForUserToJoin = true;
 
     Player turn;
-    double timeLeft;
-
-
+    double timeLeft = 30;
+    boolean isFinished = false;
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
         this.player1 = new Player();
@@ -99,6 +98,7 @@ public class ServerGameController {
             userOpponent.setUsername(player1.getUser().getUsername());
             opponent.setUser(userOpponent);
 
+
             modifyBoardDataForOpponent(opponent, player1.getBoard());
             if(turn == player2){
                 gameData = new GameData(selfPlayer.getUser(),selfPlayer.getBoard(),opponent.getUser(),opponent.getBoard(),"true",(int)timeLeft);
@@ -112,8 +112,7 @@ public class ServerGameController {
             System.out.println("sth some where went wrong");
         }
         serverPayLoad.setGameData(gameData);
-
-        serverPayLoad.setGameData(gameData);
+        serverPayLoad.getStringStringHashMap().put("Winner",Boolean.toString(player.isWinner()));
         ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),command,serverPayLoad);
         player.getConnection().execute(serverRequest);
     }
@@ -224,6 +223,12 @@ public class ServerGameController {
 
     public void sendGameStartMessage(Player player) throws IOException {
         ServerPayLoad payLoad = new ServerPayLoad();
+        timeLeft = 25;
+        synchronized (this){
+            this.notifyAll();
+        }
+        GameData gameData = new GameData(null,null,null,null,null,(int)timeLeft);
+        payLoad.setGameData(gameData);
         if(player == turn){
             payLoad.getStringStringHashMap().put("turn","true");
         }
@@ -265,7 +270,7 @@ public class ServerGameController {
         }
     }
 
-    public void hit(int x, int y, Player player) {
+    public boolean hit(int x, int y, Player player) {
         BoardController boardController = null;
         if(player == player1){
             boardController = new BoardController(player2.getBoard());
@@ -274,6 +279,36 @@ public class ServerGameController {
             boardController = new BoardController(player1.getBoard());
         }
 
-        boardController.hit(x,y);
+        boolean isAHit =  boardController.hit(x,y);
+
+        isFinished = checkWinner(player1) || checkWinner(player2);
+        System.out.println("is finished:" + isFinished);
+        return isAHit;
+    }
+
+    private boolean checkWinner(Player player) {
+        for (int i = 0; i < 10 ; i++) {
+            for (int j = 0; j <10 ; j++) {
+                if(player.getBoard().getBoard()[i][j].charAt(1) != '0' && player.getBoard().getBoard()[i][j].charAt(0) == '+' ){
+                    return false;
+                }
+            }
+        }
+        if(player == player1){
+            player2.setWinner(true);
+        }
+        else {
+            player2.setWinner(false);
+        }
+        return true;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void sendReadyMessage(Player player) throws IOException {
+        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"opponentReady",null);
+        player.getConnection().execute(serverRequest);
     }
 }

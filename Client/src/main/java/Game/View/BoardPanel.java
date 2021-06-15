@@ -7,12 +7,13 @@ import Game.Listener.BoardPanelListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class BoardPanel extends JPanel implements MouseListener {
+public class BoardPanel extends JPanel {
 
     private final Sprite background = new Background(0,0);
     private Sprite HBattleShip;
@@ -36,6 +37,9 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     BoardPanelListener boardPanelListener;
 
+    boolean mouseListenerSwitch = true;
+
+
     public BoardPanel() throws IOException {
 
         setDoubleBuffered(true);
@@ -48,9 +52,24 @@ public class BoardPanel extends JPanel implements MouseListener {
         this.setBackground(colorConfig.getColor04());
         this.setLayout(null);
         this.setBounds(100,100,350,350);
-        addMouseListener(this);
 
         repaint();
+
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(mouseListenerSwitch){
+                    try {
+                        boardPanelListener.listen(e.getX(), e.getY());
+
+                    }catch (NullPointerException | IOException nullPointerException){
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -60,32 +79,6 @@ public class BoardPanel extends JPanel implements MouseListener {
         onDraw(g2D);
     }
 
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        try {
-            boardPanelListener.listen(e.getX(), e.getY());
-        }catch (NullPointerException | IOException nullPointerException){
-
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 
     protected void onDraw(Graphics2D g2D){
         background.draw(g2D);
@@ -250,5 +243,13 @@ public class BoardPanel extends JPanel implements MouseListener {
     public void addCrosses(Cross cross){
         crosses.add(cross);
         repaint();
+    }
+
+    public void removeMouseListener(){
+        mouseListenerSwitch = false;
+    }
+
+    public void addMouseListener(){
+        mouseListenerSwitch = true;
     }
 }

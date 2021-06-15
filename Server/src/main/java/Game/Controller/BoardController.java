@@ -15,11 +15,17 @@ public class BoardController {
 
     }
 
-    public void hit(int x, int y) {
+    public boolean hit(int x, int y) {
+        boolean isAHit = false;
+        if(board.getBoard()[y][x].charAt(1) != '0'){
+            isAHit = true;
+        }
         board.getBoard()[y][x] = "-" + board.getBoard()[y][x].charAt(1);
         if (checkShipExplosion(board.getBoard()[y][x].charAt(1))) {
             explodeShip(board.getBoard()[y][x].charAt(1));
         }
+        return isAHit;
+
     }
 
     private void explodeShip(char symbol) {

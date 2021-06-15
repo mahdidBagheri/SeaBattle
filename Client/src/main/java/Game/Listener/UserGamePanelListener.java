@@ -21,4 +21,8 @@ public class UserGamePanelListener {
     public void shuffle() throws IOException {
         gameController.shuffleBoard();
     }
+
+    public void ready() throws IOException {
+        gameController.ready();
+    }
 }

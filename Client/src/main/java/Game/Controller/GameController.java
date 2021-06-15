@@ -12,9 +12,9 @@ import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
 import Utils.UserInfoHandler;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class GameController {
     UserGamePanel userGamePanel;
@@ -27,8 +27,12 @@ public class GameController {
     Board opponentBoard;
 
     boolean turn = false;
+    boolean isFinished = false;
+    boolean isStarted = false;
+    boolean winner = false;
 
     double remaingTime = 0;
+    Timer timer = new Timer(this);
 
     public void setGameThreadServerListener() {
         GameThreadServerListener gameThreadServerListener = new GameThreadServerListener(this);
@@ -62,9 +66,10 @@ public class GameController {
         printBoard(gameData.getBoard1());
 
         //TODO change this part !
-            this.board = gameData.getBoard1();
-            this.opponentBoard = gameData.getBoard2();
+        this.board = gameData.getBoard1();
+        this.opponentBoard = gameData.getBoard2();
         retriveBoard();
+
     }
 
     public void printBoard(Board board) {
@@ -79,13 +84,12 @@ public class GameController {
 
     public void opponentFound() {
         userGamePanel.getFindingOpponentLbl().setText("Opponent found!");
-        userGamePanel.getTimerLbl().setText("00:30");
         userGamePanel.getReadyBtn().setEnabled(true);
         userGamePanel.getBoardPanel().setEnabled(true);
         userGamePanel.getShuffleBtn().setEnabled(true);
         opponentGamePanel.setVisible(true);
+        timer.start();
         opponentGamePanel.getBoardPanel().setEnabled(true);
-        timer(30);
         userGamePanel.repaint();
         opponentGamePanel.repaint();
     }
@@ -93,17 +97,16 @@ public class GameController {
 
     public void hit(int x, int y) throws IOException {
         System.out.println(x + " ,  " + y);
-        int Y = y/35;
-        int X = x/35;
-        if(opponentBoard.getBoard()[Y][X].charAt(0) == '+'){
+        int Y = y / 35;
+        int X = x / 35;
+        if (opponentBoard.getBoard()[Y][X].charAt(0) == '+') {
             ClientPayLoad clientPayLoad = new ClientPayLoad();
-            clientPayLoad.getStringStringHashMap().put("X",Integer.toString(X));
-            clientPayLoad.getStringStringHashMap().put("Y",Integer.toString(Y));
+            clientPayLoad.getStringStringHashMap().put("X", Integer.toString(X));
+            clientPayLoad.getStringStringHashMap().put("Y", Integer.toString(Y));
             //TODO complete this
-            ClientRequest clientRequest = new ClientRequest("Game",clientPayLoad,null,"hit",null,null);
+            ClientRequest clientRequest = new ClientRequest("Game", clientPayLoad, null, "hit", null, null);
             clientConnection.execute(clientRequest);
-        }
-        else if(opponentBoard.getBoard()[Y][X].charAt(0) == '-'){
+        } else if (opponentBoard.getBoard()[Y][X].charAt(0) == '-') {
             retriveBoard();
         }
 
@@ -114,8 +117,6 @@ public class GameController {
         opponentGamePanel.setVisible(true);
         OpponentGamePanelListener opponentGamePanelListener = new OpponentGamePanelListener(this);
         opponentGamePanel.setOpponentGamePanelListener(opponentGamePanelListener);
-
-
     }
 
     public void setOpponentGamePanel(OpponentGamePanel opponentGamePanel) {
@@ -132,23 +133,21 @@ public class GameController {
 
     private void retriveHits() {
         for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10 ; j++) {
-                if(board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) != '0'){
-                    userGamePanel.getBoardPanel().addCrosses(new Cross(j*35,i*35));
-                }
-                else if(board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) == '0'){
-                    userGamePanel.getBoardPanel().addBomb(new Bomb(j*35,i*35));
+            for (int j = 0; j < 10; j++) {
+                if (board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) != '0') {
+                    userGamePanel.getBoardPanel().addCrosses(new Cross(j * 35, i * 35));
+                } else if (board.getBoard()[i][j].charAt(0) == '-' && board.getBoard()[i][j].charAt(1) == '0') {
+                    userGamePanel.getBoardPanel().addBomb(new Bomb(j * 35, i * 35));
                 }
             }
         }
 
         for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10 ; j++) {
-                if(opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) != '0'){
-                    opponentGamePanel.getBoardPanel().addCrosses(new Cross(j*35,i*35));
-                }
-                else if(opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) == '0'){
-                    opponentGamePanel.getBoardPanel().addBomb(new Bomb(j*35,i*35));
+            for (int j = 0; j < 10; j++) {
+                if (opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) != '0') {
+                    opponentGamePanel.getBoardPanel().addCrosses(new Cross(j * 35, i * 35));
+                } else if (opponentBoard.getBoard()[i][j].charAt(0) == '-' && opponentBoard.getBoard()[i][j].charAt(1) == '0') {
+                    opponentGamePanel.getBoardPanel().addBomb(new Bomb(j * 35, i * 35));
                 }
             }
         }
@@ -210,12 +209,12 @@ public class GameController {
                 if (board.getBoard()[i][j].charAt(1) == symbol) {
                     x = j;
                     y = i;
-                    if ( i + 1 <= 9 && board.getBoard()[i + 1][j].charAt(1) == symbol) {
+                    if (i + 1 <= 9 && board.getBoard()[i + 1][j].charAt(1) == symbol) {
                         orientation = 1;
 
                         length++;
                         int l = 0;
-                        while ( i + l <= 9 && board.getBoard()[i + l][j].charAt(1) == symbol) {
+                        while (i + l <= 9 && board.getBoard()[i + l][j].charAt(1) == symbol) {
                             length++;
                             l++;
                         }
@@ -224,7 +223,7 @@ public class GameController {
                         orientation = 0;
                         length++;
                         int l = 0;
-                        while (j + l <= 9 && board.getBoard()[i][j + l].charAt(1) == symbol ) {
+                        while (j + l <= 9 && board.getBoard()[i][j + l].charAt(1) == symbol) {
                             length++;
                             l++;
                         }
@@ -252,57 +251,101 @@ public class GameController {
 
     public void shuffleBoard() throws IOException {
         //TODO modify!
-        ClientRequest clientRequest = new ClientRequest("Game",null,null,"shuffle",null,null);
+        ClientRequest clientRequest = new ClientRequest("Game", null, null, "shuffle", null, null);
         clientConnection.execute(clientRequest);
-        remaingTime += 10;
     }
 
     public void start() {
+        isStarted = true;
         System.out.println("game started");
         userGamePanel.getShuffleBtn().setVisible(false);
 
     }
 
     public void setTurn(String turn) {
-        if(turn.equals("true")){
+        if (turn.equals("true")) {
             this.turn = true;
-            opponentGamePanel.setEnabled(true);
             opponentGamePanel.getBoardPanel().setEnabled(true);
-            opponentGamePanel.getBoardPanel().setVisible(true);
+            opponentGamePanel.getBoardPanel().addMouseListener();
             opponentGamePanel.getTurnLbl().setText("Your turn");
-        }
-        else {
+            opponentGamePanel.repaint();
+        } else {
             this.turn = false;
             opponentGamePanel.getBoardPanel().setEnabled(false);
-            opponentGamePanel.getBoardPanel().setVisible(false);
-
-            opponentGamePanel.setEnabled(false);
+            opponentGamePanel.getBoardPanel().removeMouseListener();
             opponentGamePanel.getTurnLbl().setText("opponent turn");
-
+            opponentGamePanel.repaint();
         }
         System.out.println(this.turn);
     }
-    public void timer(double t){
+
+    public void timer(double t) {
+        timer.resetTimer();
         remaingTime = t;
-        Thread timeThread = new Thread(new Runnable() {
 
-            @Override
-            public void run() {
-                while (remaingTime > 0){
-                    try {
-                        Thread.sleep(100);
-                        remaingTime -= 0.1;
-                        userGamePanel.getTimerLbl().setText(Integer.toString((int)remaingTime));
-                        userGamePanel.repaint();
+    }
 
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
-                    }
-                }
-            }
-        });
+    public double getRemaingTime() {
+        return remaingTime;
+    }
 
-        timeThread.start();
+    public void setRemaingTime(double remaingTime) {
+        this.remaingTime = remaingTime;
+    }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
+    }
+
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
+    public void showWinnerDialog() {
+        if(isWinner()){
+            JOptionPane.showMessageDialog(userGamePanel,"game finished! you won!");
+        }
+        else {
+            JOptionPane.showMessageDialog(userGamePanel,"game finished!you loose!");
+        }
+    }
+
+    public void back() {
+        //TODO finish
+    }
+
+    public void ready() throws IOException {
+        //TODO add session
+        ClientRequest clientRequest = new ClientRequest("Game",null,null,"ready",null,null);
+        clientConnection.execute(clientRequest);
+    }
+
+    public void readyOpponent() {
+        JOptionPane.showMessageDialog(userGamePanel,"opponent is ready");
+
+    }
+
+    public UserGamePanel getUserGamePanel() {
+        return userGamePanel;
+    }
+
+    public OpponentGamePanel getOpponentGamePanel() {
+        return opponentGamePanel;
     }
 }

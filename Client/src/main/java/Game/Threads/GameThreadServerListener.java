@@ -31,15 +31,38 @@ public class GameThreadServerListener extends Thread {
                 else if(serverRequest.getCommand().equals("FirstGameData")){
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
                     gameController.opponentFound();
+                    gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
+
                 }
                 else if(serverRequest.getCommand().equals("GameData")){
+                    if(!gameController.isStarted()){
+                        gameController.start();
+                        gameController.addOpponentGamePanel();
+                    }
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
+                    gameController.setTurn(serverRequest.getPayLoad().getGameData().getTurn());
+                    gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
                 }
-                else if(serverRequest.getCommand().equals("GameStarted")){
-                    gameController.start();
-                    gameController.setTurn(serverRequest.getPayLoad().getStringStringHashMap().get("turn"));
-                    gameController.addOpponentGamePanel();
+                else if(serverRequest.getCommand().equals("shuffle")){
+                    gameController.applyGameData(serverRequest.getPayLoad().getGameData());
+                    gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
+                }
+                else if(serverRequest.getCommand().equals("GameFinished")){
+                    gameController.setFinished(true);
+                    if(serverRequest.getPayLoad().getStringStringHashMap().get("Winner").equals("true")){
+                        gameController.setWinner(true);
+                    }else{
+                        gameController.setWinner(false);
+                    }
+                    gameController.getOpponentGamePanel().getBoardPanel().setVisible(true);
+                    gameController.getOpponentGamePanel().getBoardPanel().removeMouseListener();
+                    gameController.getOpponentGamePanel().repaint();
+                    gameController.showWinnerDialog();
+                    gameController.back();
 
+                }
+                else if(serverRequest.getCommand().equals("opponentReady")){
+                    gameController.readyOpponent();
                 }
 
             } catch (CouldNotConnectToServerException e) {

@@ -23,10 +23,9 @@ public class GameThreadClientListener extends Thread {
 
     @Override
     public void run() {
-        boolean isRunning = true;
 
         try {
-            while (isRunning) {
+            while (!serverGameController.isFinished()) {
                 ServerWaitForInput serverWaitForInput = new ServerWaitForInput();
                 serverWaitForInput.waitForInput(player.getConnection().getSocket());
 
@@ -35,22 +34,40 @@ public class GameThreadClientListener extends Thread {
 
                 if(clientRequest.getSource().equals("Game")){
                     if(clientRequest.getCommand().equals("shuffle")){
-                        player.setShuffle(true);
-                        player.decreaseShuffleNum();
                         serverGameController.increaseTimeLeftByShuffle(player);
+                        player.decreaseShuffleNum();
+                        player.setShuffle(true);
                     }
                     else if(clientRequest.getCommand().equals("hit")){
+                        player.setHited(true);
                         int x = Integer.parseInt(clientRequest.getClientPayLoad().getStringStringHashMap().get("X"));
                         int y = Integer.parseInt(clientRequest.getClientPayLoad().getStringStringHashMap().get("Y"));
-                        serverGameController.hit(x,y,player);
-                        //serverGameController.switchTurn();
+                        boolean isAHit = serverGameController.hit(x,y,player);
+                        if(!isAHit){
+                            serverGameController.switchTurn();
+                        }
+                        serverGameController.setTimeLeft(25);
+                        synchronized (serverGameController){
+                            serverGameController.notifyAll();
+                        }
                         serverGameController.sendGameData("GameData");
+                    }
+                    else if(clientRequest.getCommand().equals("ready")){
+                        player.setReady(true);
                     }
                 }
 
             }
         } catch (CouldNotConnectToServerException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+
+        synchronized (serverGameController){
+            try {
+                serverGameController.wait();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
         }
 
     }
