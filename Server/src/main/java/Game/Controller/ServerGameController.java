@@ -28,6 +28,7 @@ public class ServerGameController {
     Player turn;
     double timeLeft = 30;
     boolean isFinished = false;
+    Object finishedNotifier = new Object();
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
         this.player1 = new Player();
@@ -209,14 +210,22 @@ public class ServerGameController {
         serverGameThread.start();
     }
 
-    public void user1StartListening() {
+    public void user1StartListening() throws InterruptedException {
         GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(this,player1);
-        gameThreadClientListener.run();
+        gameThreadClientListener.start();
+        synchronized (finishedNotifier){
+            finishedNotifier.wait();
+        }
+        int a = 0;
     }
 
-    public void user2StartListening() {
+    public void user2StartListening() throws InterruptedException {
         GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(this,player2);
-        gameThreadClientListener.run();
+        gameThreadClientListener.start();
+        synchronized (finishedNotifier){
+            finishedNotifier.wait();
+        }
+        int a = 0;
     }
 
     public Player getTurn() {
@@ -348,7 +357,7 @@ public class ServerGameController {
     }
 
 
-    public void reconnect(ServerConnection serverConnection, User user) {
+    public void reconnect(ServerConnection serverConnection, User user) throws InterruptedException {
         if(player1.getUser().getUsername().equals(user.getUsername())){
             player1.setConnection(serverConnection);
             user1StartListening();
@@ -357,5 +366,18 @@ public class ServerGameController {
             player2.setConnection(serverConnection);
             user2StartListening();
         }
+    }
+
+    public void endGame() throws InterruptedException {
+        saveGame();
+        synchronized (finishedNotifier){
+            finishedNotifier.notifyAll();
+        }
+        Thread.sleep(150);
+        int a = 0;
+        
+    }
+
+    private void saveGame() {
     }
 }

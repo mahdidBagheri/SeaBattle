@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 public class ServerGameListener {
     ServerConnection serverConnection;
-    OnlineGames onlineGames;
+    volatile OnlineGames onlineGames;
 
     public ServerGameListener(ServerConnection serverConnection, OnlineGames onlineGames) {
         this.serverConnection = serverConnection;
@@ -55,6 +55,10 @@ public class ServerGameListener {
                         }
                         newServerGameController.startGame();
                         newServerGameController.user1StartListening();
+                        if(newServerGameController.isFinished()){
+                            onlineGames.removeOnlineGame(newServerGameController);
+                            int a = 0;
+                        }
                     } else {
                         System.out.println("could not find any user");
                     }

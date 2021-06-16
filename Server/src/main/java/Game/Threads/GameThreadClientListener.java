@@ -25,7 +25,7 @@ public class GameThreadClientListener extends Thread {
     public void run() {
         while (!serverGameController.isFinished()) {
             try {
-                ServerWaitForInput serverWaitForInput = new ServerWaitForInput();
+                ServerWaitForInput serverWaitForInput = new ServerWaitForInput(serverGameController.isFinished());
                 serverWaitForInput.waitForInput(player.getConnection().getSocket());
 
 
@@ -56,32 +56,22 @@ public class GameThreadClientListener extends Thread {
                 }
 
             }  catch (CouldNotConnectToServerException e) {
-                try {
-                    boolean player1Connection = serverGameController.connectionCheck(player);
-                    if (!player1Connection) {
-                        serverGameController.connectionLostProtocol(serverGameController.getPlayer1());
-                    }
-                    else {
-                        continue;
-                    }
 
-                } catch (CouldNotConnectToServerException | ClassNotFoundException | IOException couldNotConnectToServerException) {
-                    couldNotConnectToServerException.printStackTrace();
-                    break;
-                }
                 e.printStackTrace();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
-            synchronized (serverGameController) {
-                try {
-                    serverGameController.wait();
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-            }
 
+
+        }
+        synchronized (serverGameController) {
+            try {
+                serverGameController.wait();
+                int a = 0;
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
         }
     }
 }

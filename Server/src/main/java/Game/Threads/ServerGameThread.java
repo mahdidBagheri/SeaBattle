@@ -87,11 +87,15 @@ public class ServerGameThread extends Thread {
                 serverGameController.sendGameData("GameData");
             }
         }
-        if(serverGameController.isFinished() && (serverGameController.getPlayer1().isWinner() || serverGameController.getPlayer2().isWinner() )){
+        System.out.println("Finished: " + serverGameController.isFinished());
+        if(serverGameController.isFinished()){
             serverGameController.sendGameData("GameFinished");
+            System.out.println("GameFinished sent");
+            Thread.sleep(200);
             synchronized (serverGameController){
                 serverGameController.notifyAll();
             }
+            serverGameController.endGame();
         }
     }
 }

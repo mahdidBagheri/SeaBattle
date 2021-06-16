@@ -17,9 +17,8 @@ public class GameThreadServerListener extends Thread {
 
     @Override
     public void run() {
-        boolean isRunning = true;
 
-        while (isRunning){
+        while (!gameController.isFinished() && !gameController.getClientConnection().getSocket().isClosed() ){
             try {
                 ClientWaitForInput.waitForInput(gameController.getClientConnection().getSocket());
                 ObjectInputStream objectInputStream = new ObjectInputStream(gameController.getClientConnection().getSocket().getInputStream());
@@ -51,6 +50,7 @@ public class GameThreadServerListener extends Thread {
                     gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
                 }
                 else if(serverRequest.getCommand().equals("GameFinished")){
+                    System.out.println("got finished game message");
                     gameController.setFinished(true);
                     if(serverRequest.getPayLoad().getStringStringHashMap().get("Winner").equals("true")){
                         gameController.setWinner(true);
@@ -60,6 +60,8 @@ public class GameThreadServerListener extends Thread {
                     gameController.getOpponentGamePanel().getBoardPanel().setVisible(true);
                     gameController.getOpponentGamePanel().getBoardPanel().removeMouseListener();
                     gameController.getOpponentGamePanel().repaint();
+                    System.out.println("going to show dialog...");
+
                     gameController.showWinnerDialog();
                     gameController.back();
 

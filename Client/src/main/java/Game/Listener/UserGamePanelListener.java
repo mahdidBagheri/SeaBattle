@@ -27,6 +27,8 @@ public class UserGamePanelListener {
     }
 
     public void back() throws IOException {
+        gameController.getClientConnection().getSocket().close();
+        gameController = null;
         mainPanel.addMainMenu();
     }
 }

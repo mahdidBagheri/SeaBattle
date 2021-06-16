@@ -16,9 +16,6 @@ public class ClientWaitForInput {
             } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
-            if (System.currentTimeMillis() - start > 10e3) {
-                throw new CouldNotConnectToServerException(" could not connect to server");
-            }
             try {
                 if (socket.getInputStream().available() == 0) {
                     continue;

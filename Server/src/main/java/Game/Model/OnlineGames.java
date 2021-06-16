@@ -18,4 +18,9 @@ public class OnlineGames {
     public void addOnlineGame(ServerGameController serverGameController) {
         onlineGames.add(serverGameController);
     }
+
+    public void removeOnlineGame(ServerGameController serverGameController){
+        onlineGames.remove(serverGameController);
+
+    }
 }
