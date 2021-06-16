@@ -1,5 +1,6 @@
 package Game.Threads;
 
+import Connection.Exceptions.CouldNotConnectToServerException;
 import Game.Controller.BoardController;
 import Game.Controller.ServerGameController;
 
@@ -19,14 +20,19 @@ public class ServerGameThread extends Thread {
             interruptedException.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (CouldNotConnectToServerException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void startTimer() throws InterruptedException, IOException {
+    private void startTimer() throws InterruptedException, IOException, CouldNotConnectToServerException, ClassNotFoundException {
         while (!serverGameController.isFinished()) {
+            int checkConnection = 0;
             while (serverGameController.getTimeLeft() > 0) {
-
+                checkConnection++;
                 Thread.sleep(100);
                 serverGameController.setTimeLeft(serverGameController.getTimeLeft() - 0.1);
 
@@ -71,6 +77,17 @@ public class ServerGameThread extends Thread {
                 }
                 if (serverGameController.getPlayer2().isHited()) {
                     serverGameController.getPlayer2().setHited(false);
+                }
+                if(checkConnection == 10){
+                    checkConnection = 0;
+                    boolean player1Connection = serverGameController.connectionCheck(serverGameController.getPlayer1());
+                    boolean player2Connection = serverGameController.connectionCheck(serverGameController.getPlayer2());
+                    if(!player1Connection){
+                        serverGameController.connectionLostProtocol(serverGameController.getPlayer1());
+                    }
+                    if(!player2Connection){
+                        serverGameController.connectionLostProtocol(serverGameController.getPlayer2());
+                    }
                 }
 
 

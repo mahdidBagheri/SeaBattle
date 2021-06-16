@@ -25,4 +25,8 @@ public class UserGamePanelListener {
     public void ready() throws IOException {
         gameController.ready();
     }
+
+    public void back() {
+        gameController.back();
+    }
 }

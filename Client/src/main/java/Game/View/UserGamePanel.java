@@ -18,6 +18,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
 
     JButton readyBtn;
     JButton shuffleBtn;
+    JButton backBtn;
     BoardPanel boardPanel;
 
     UserGamePanelListener userGamePanelListener;
@@ -47,7 +48,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
         shuffleBtn = new JButton("shuffle");
         shuffleBtn.setText("shuffle");
         shuffleBtn.setFocusable(false);
-        shuffleBtn.setBounds(120,475,250,50);
+        shuffleBtn.setBounds(150,475,250,50);
         shuffleBtn.addActionListener(this);
         shuffleBtn.setEnabled(false);
 
@@ -58,6 +59,14 @@ public class UserGamePanel extends JPanel implements ActionListener {
         readyBtn.addActionListener(this);
         readyBtn.setEnabled(false);
 
+        backBtn = new JButton("back");
+        backBtn.setText("back");
+        backBtn.setFocusable(false);
+        backBtn.setBounds(15,475,100,50);
+        backBtn.addActionListener(this);
+        backBtn.setEnabled(true);
+
+
         boardPanel = new BoardPanel();
         boardPanel.setEnabled(false);
 
@@ -66,6 +75,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
         this.add(shuffleBtn);
         this.add(readyBtn);
         this.add(boardPanel);
+        this.add(backBtn);
 
     }
 
@@ -81,7 +91,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
                 ioException.printStackTrace();
             }
         }
-        if(e.getSource() == shuffleBtn){
+        else if(e.getSource() == shuffleBtn){
             remainShuffles--;
             if(remainShuffles <= 0){
                 shuffleBtn.setEnabled(false);
@@ -91,6 +101,9 @@ public class UserGamePanel extends JPanel implements ActionListener {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
+        }
+        else if(e.getSource() == backBtn){
+            userGamePanelListener.back();
         }
 
     }

@@ -34,6 +34,9 @@ public class GameThreadServerListener extends Thread {
                     gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
 
                 }
+                else if(serverRequest.getCommand().equals("opponentReady")){
+                    gameController.readyOpponent();
+                }
                 else if(serverRequest.getCommand().equals("GameData")){
                     if(!gameController.isStarted()){
                         gameController.start();
@@ -61,9 +64,10 @@ public class GameThreadServerListener extends Thread {
                     gameController.back();
 
                 }
-                else if(serverRequest.getCommand().equals("opponentReady")){
-                    gameController.readyOpponent();
+                else if(serverRequest.getCommand().equals("opponentConnectionLost")){
+                    gameController.showOpponentLostConnectionDialog();
                 }
+
 
             } catch (CouldNotConnectToServerException e) {
                 e.printStackTrace();

@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class ServerGameController {
+    public static ServerGameController instance = null;
 
     Player player1;
     Player player2;
@@ -32,6 +33,7 @@ public class ServerGameController {
         this.player1 = new Player();
         this.player1.setUser(user);
         this.player1.setConnection(serverConnection);
+        instance = this;
 
     }
 
@@ -172,8 +174,8 @@ public class ServerGameController {
     }
 
     public boolean checkUsersAvailability() throws CouldNotConnectToServerException, IOException, ClassNotFoundException {
-        boolean isUser1Available = informNewGameToUser(player1);
-        boolean isUser2Available = informNewGameToUser(player2);
+        boolean isUser1Available = connectionCheck(player1);
+        boolean isUser2Available = connectionCheck(player2);
         if(isUser1Available && isUser2Available){
             return true;
         }
@@ -182,7 +184,7 @@ public class ServerGameController {
         }
     }
 
-    private boolean informNewGameToUser(Player player) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
+    public boolean connectionCheck(Player player) throws ClassNotFoundException, IOException, CouldNotConnectToServerException {
         ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"connectionCheck",null);
         return player.getConnection().executeBoolean(serverRequest);
     }
@@ -221,23 +223,6 @@ public class ServerGameController {
         return turn;
     }
 
-    public void sendGameStartMessage(Player player) throws IOException {
-        ServerPayLoad payLoad = new ServerPayLoad();
-        timeLeft = 25;
-        synchronized (this){
-            this.notifyAll();
-        }
-        GameData gameData = new GameData(null,null,null,null,null,(int)timeLeft);
-        payLoad.setGameData(gameData);
-        if(player == turn){
-            payLoad.getStringStringHashMap().put("turn","true");
-        }
-        else {
-            payLoad.getStringStringHashMap().put("turn","false");
-        }
-        ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"GameStarted",payLoad);
-        player.getConnection().execute(serverRequest);
-    }
 
     public double getTimeLeft() {
         return timeLeft;
@@ -311,4 +296,56 @@ public class ServerGameController {
         ServerRequest serverRequest = new ServerRequest(player.getUser().getUsername(),"opponentReady",null);
         player.getConnection().execute(serverRequest);
     }
+
+    public void connectionLostProtocol(Player player) throws IOException {
+        player.setConnection(null);
+        sendOpponentLostConnectionMessageToOtherPlayer(player);
+        waitForPlayerToJoin(player);
+    }
+
+    private void waitForPlayerToJoin(Player player) {
+        Thread waitToJoin = new Thread(new Runnable() {
+            double timer = 60;
+            @Override
+            public void run() {
+                while (timer > 0){
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
+
+                    if(player.getConnection() != null){
+                        GameThreadClientListener gameThreadClientListener = new GameThreadClientListener(instance,player);
+                        gameThreadClientListener.start();
+                        break;
+                    }
+                }
+                if(timer <= 0){
+                    if(player == player1){
+                        player2.setWinner(true);
+                        isFinished = true;
+                    }
+                    else {
+                        player1.setWinner(true);
+                        isFinished = true;
+                    }
+                }
+            }
+        });
+        waitToJoin.run();
+    }
+
+    private void sendOpponentLostConnectionMessageToOtherPlayer(Player player) throws IOException {
+        if(player == player1){
+            ServerRequest serverRequest = new ServerRequest(player2.getUser().getUsername(),"opponentConnectionLost",null);
+            player2.getConnection().execute(serverRequest);
+        }
+        else {
+            ServerRequest serverRequest = new ServerRequest(player1.getUser().getUsername(),"opponentConnectionLost",null);
+            player1.getConnection().execute(serverRequest);
+        }
+    }
+
+
 }

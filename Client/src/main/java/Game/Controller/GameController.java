@@ -259,6 +259,7 @@ public class GameController {
         isStarted = true;
         System.out.println("game started");
         userGamePanel.getShuffleBtn().setVisible(false);
+        userGamePanel.getReadyBtn().setVisible(false);
 
     }
 
@@ -326,8 +327,10 @@ public class GameController {
         }
     }
 
-    public void back() {
-        //TODO finish
+    public void back() throws IOException {
+        //TODO add session
+        ClientRequest clientRequest = new ClientRequest("Game",null,null,"back",null,null);
+        clientConnection.execute(clientRequest);
     }
 
     public void ready() throws IOException {
@@ -347,5 +350,9 @@ public class GameController {
 
     public OpponentGamePanel getOpponentGamePanel() {
         return opponentGamePanel;
+    }
+
+    public void showOpponentLostConnectionDialog() {
+        JOptionPane.showMessageDialog(userGamePanel,"opponent connection lost");
     }
 }
