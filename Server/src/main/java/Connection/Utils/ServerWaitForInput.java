@@ -16,7 +16,8 @@ public class ServerWaitForInput {
             } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
-            if (System.currentTimeMillis() - start > 10e8) {
+
+            if (System.currentTimeMillis() - start > 5e3) {
                 throw new CouldNotConnectToServerException(" could not connect to server");
             }
             try {

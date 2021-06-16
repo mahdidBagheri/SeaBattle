@@ -26,7 +26,7 @@ public class UserGamePanelListener {
         gameController.ready();
     }
 
-    public void back() {
-        gameController.back();
+    public void back() throws IOException {
+        mainPanel.addMainMenu();
     }
 }

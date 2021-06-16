@@ -348,4 +348,14 @@ public class ServerGameController {
     }
 
 
+    public void reconnect(ServerConnection serverConnection, User user) {
+        if(player1.getUser().getUsername().equals(user.getUsername())){
+            player1.setConnection(serverConnection);
+            user1StartListening();
+        }
+        else {
+            player2.setConnection(serverConnection);
+            user2StartListening();
+        }
+    }
 }

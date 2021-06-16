@@ -70,7 +70,7 @@ public class GameThreadServerListener extends Thread {
 
 
             } catch (CouldNotConnectToServerException e) {
-                e.printStackTrace();
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

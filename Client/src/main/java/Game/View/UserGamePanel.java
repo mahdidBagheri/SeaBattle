@@ -103,7 +103,11 @@ public class UserGamePanel extends JPanel implements ActionListener {
             }
         }
         else if(e.getSource() == backBtn){
-            userGamePanelListener.back();
+            try {
+                userGamePanelListener.back();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
 
     }

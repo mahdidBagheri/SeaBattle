@@ -327,11 +327,6 @@ public class GameController {
         }
     }
 
-    public void back() throws IOException {
-        //TODO add session
-        ClientRequest clientRequest = new ClientRequest("Game",null,null,"back",null,null);
-        clientConnection.execute(clientRequest);
-    }
 
     public void ready() throws IOException {
         //TODO add session
@@ -354,5 +349,9 @@ public class GameController {
 
     public void showOpponentLostConnectionDialog() {
         JOptionPane.showMessageDialog(userGamePanel,"opponent connection lost");
+    }
+
+    public void back() {
+
     }
 }

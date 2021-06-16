@@ -78,19 +78,6 @@ public class ServerGameThread extends Thread {
                 if (serverGameController.getPlayer2().isHited()) {
                     serverGameController.getPlayer2().setHited(false);
                 }
-                if(checkConnection == 10){
-                    checkConnection = 0;
-                    boolean player1Connection = serverGameController.connectionCheck(serverGameController.getPlayer1());
-                    boolean player2Connection = serverGameController.connectionCheck(serverGameController.getPlayer2());
-                    if(!player1Connection){
-                        serverGameController.connectionLostProtocol(serverGameController.getPlayer1());
-                    }
-                    if(!player2Connection){
-                        serverGameController.connectionLostProtocol(serverGameController.getPlayer2());
-                    }
-                }
-
-
             }
             if (serverGameController.getTimeLeft() <= 0 || (serverGameController.getPlayer1().isReady() && serverGameController.getPlayer2().isReady())) {
                 serverGameController.getPlayer1().setReady(false);

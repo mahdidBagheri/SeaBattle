@@ -31,32 +31,49 @@ public class ServerGameListener {
 
         if(clientRequest.getCommand().equals("newGame")){
             serverConnection.getSocket().setKeepAlive(true);
-            ServerGameController serverGameController = checkForGameWaitingForUserToJoin();
-            if(serverGameController != null){
-                serverGameController.joinGame(serverConnection,user);
-                synchronized (onlineGames){
-                    onlineGames.wait();
-                }
-                serverGameController.user2StartListening();
-
+            ServerGameController joinServerGameController = JoinConnectionLostGameIfExist(clientRequest.getUsername());
+            if(joinServerGameController != null){
+                joinServerGameController.reconnect(serverConnection,user);
             }
             else {
-                ServerGameController newServerGameController = new ServerGameController(serverConnection,user);
-                onlineGames.addOnlineGame(newServerGameController);
-                boolean shouldStart = newServerGameController.waitForOtherUserToJoin();
-                if(shouldStart){
-                    newServerGameController.initialize();
-                    synchronized (onlineGames){
-                        onlineGames.notify();
+                ServerGameController serverGameController = checkForGameWaitingForUserToJoin();
+                if (serverGameController != null) {
+                    serverGameController.joinGame(serverConnection, user);
+                    synchronized (onlineGames) {
+                        onlineGames.wait();
                     }
-                    newServerGameController.startGame();
-                    newServerGameController.user1StartListening();
-                }
-                else {
-                    System.out.println("could not find any user");
+                    serverGameController.user2StartListening();
+
+                } else {
+                    ServerGameController newServerGameController = new ServerGameController(serverConnection, user);
+                    onlineGames.addOnlineGame(newServerGameController);
+                    boolean shouldStart = newServerGameController.waitForOtherUserToJoin();
+                    if (shouldStart) {
+                        newServerGameController.initialize();
+                        synchronized (onlineGames) {
+                            onlineGames.notify();
+                        }
+                        newServerGameController.startGame();
+                        newServerGameController.user1StartListening();
+                    } else {
+                        System.out.println("could not find any user");
+                    }
                 }
             }
         }
+    }
+
+    private ServerGameController JoinConnectionLostGameIfExist(String userName) {
+        for (ServerGameController serverGameController : onlineGames.getOnlineGames()) {
+            if(serverGameController.getPlayer1() != null &&serverGameController.getPlayer1().getUser().getUsername().equals(userName)){
+                return serverGameController;
+            }
+            else if(serverGameController.getPlayer2() != null && serverGameController.getPlayer2().getUser().getUsername().equals(userName)){
+                return serverGameController;
+            }
+        }
+
+        return null;
     }
 
     private ServerGameController checkForGameWaitingForUserToJoin() {
