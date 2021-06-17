@@ -30,12 +30,15 @@ public class ServerGameController {
     double timeLeft = 30;
     boolean isFinished = false;
     Object finishedNotifier = new Object();
+    String gameUUID;
 
     public ServerGameController(ServerConnection serverConnection,User user) throws SQLException, NotAvailableUserException {
         this.player1 = new Player();
         this.player1.setUser(user);
         this.player1.setConnection(serverConnection);
         instance = this;
+
+        this.gameUUID = java.util.UUID.randomUUID().toString();
 
     }
 
@@ -420,5 +423,46 @@ public class ServerGameController {
 
         }
         connectionToDataBase.Disconect();
+    }
+
+    public String getGameUUID() {
+        return gameUUID;
+    }
+
+    public void sendDataToViewr(ServerConnection serverConnection) throws InterruptedException, IOException {
+        while (!isFinished && !serverConnection.getSocket().isClosed()){
+            Thread.sleep(200);
+
+            GameData gameData = GameDataForViewr();
+
+            ServerPayLoad serverPayLoad = new ServerPayLoad();
+            serverPayLoad.setGameData(gameData);
+            ServerRequest serverRequest = new ServerRequest(null,"ViewGameData",serverPayLoad);
+            serverConnection.execute(serverRequest);
+        }
+    }
+
+    private GameData GameDataForViewr() {
+        Player player1forViwer = new Player();
+        User user1 = new User();
+        user1.setUsername(player1.getUser().getUsername());
+        player1forViwer.setUser(user1);
+
+
+        Player player2forViwer = new Player();
+        User user2 = new User();
+        user2.setUsername(player2.getUser().getUsername());
+        player2forViwer.setUser(user2);
+
+        modifyBoardDataForOpponent(player1forViwer,player1.getBoard());
+        modifyBoardDataForOpponent(player2forViwer,player2.getBoard());
+
+
+        GameData gameData = new GameData(player1forViwer.getUser(),player1forViwer.getBoard(),player2forViwer.getUser(),
+                player2forViwer.getBoard(),
+                turn.getUser().getUsername(),
+                (int)timeLeft);
+
+        return gameData;
     }
 }

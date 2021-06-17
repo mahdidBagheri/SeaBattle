@@ -40,7 +40,7 @@ public class BoardPanel extends JPanel {
     boolean mouseListenerSwitch = true;
 
 
-    public BoardPanel() throws IOException {
+    public BoardPanel(int x, int y) throws IOException {
 
         setDoubleBuffered(true);
         setFocusable(true);
@@ -51,7 +51,7 @@ public class BoardPanel extends JPanel {
 
         this.setBackground(colorConfig.getColor04());
         this.setLayout(null);
-        this.setBounds(100,100,350,350);
+        this.setBounds(x,y,350,350);
 
         repaint();
 

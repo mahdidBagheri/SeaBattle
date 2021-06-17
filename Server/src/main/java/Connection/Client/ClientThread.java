@@ -51,7 +51,7 @@ public class ClientThread extends Thread {
                 } else if (clientRequest.getSource().equals("viewGame")) {
                     //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerViewGameListener serverViewGameListener = new ServerViewGameListener(serverConnection,onlineGames);
-                    serverViewGameListener.listen();
+                    serverViewGameListener.listen(clientRequest);
                 }
 
                 int a = 0;

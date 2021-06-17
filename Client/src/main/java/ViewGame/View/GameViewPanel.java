@@ -2,8 +2,14 @@ package ViewGame.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Connection.Exceptions.CouldNotConnectToServerException;
+import Game.Model.Board;
 import Game.View.BoardPanel;
+import Game.View.OpponentGamePanel;
+import Game.View.UserGamePanel;
 import MainFrame.View.MainPanel;
+import MainMenu.Listener.ViewGameListener;
+import ViewGame.Listener.ViewGameBoardListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,12 +18,19 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class GameViewPanel extends JPanel implements ActionListener {
+    public static GameViewPanel gameViewPanel = null;
     MainPanel mainPanel;
 
     HashMap<String, String> onlineGames;
 
     JComboBox<String> onlineGamesCombo;
     JButton viewGame;
+
+    ViewGameBoardListener viewGameBoardListener;
+
+    BoardPanel userBoardPanel;
+    BoardPanel opponentBoardPanel;
+
 
     public void setMainPanel(MainPanel mainPanel) {
         this.mainPanel = mainPanel;
@@ -44,9 +57,12 @@ public class GameViewPanel extends JPanel implements ActionListener {
         viewGame.addActionListener(this);
         viewGame.setEnabled(true);
 
+        viewGameBoardListener = new ViewGameBoardListener(this);
 
         this.add(onlineGamesCombo);
         this.add(viewGame);
+
+        gameViewPanel = this;
 
         initialize(onlineGames);
 
@@ -60,8 +76,40 @@ public class GameViewPanel extends JPanel implements ActionListener {
 
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == viewGame){
+            String selectedGame = (String)onlineGamesCombo.getSelectedItem();
+            String gameUUID = onlineGames.get(selectedGame);
+            try {
+                viewGameBoardListener.listen(gameUUID);
+            } catch (IOException | CouldNotConnectToServerException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
 
+    public void clear() {
+        if(userBoardPanel != null){
+            remove(userBoardPanel);
+        }
+        if(opponentBoardPanel != null){
+            remove(opponentBoardPanel);
+        }
+    }
+
+    public void addUserBoardPanel() throws IOException {
+        this.userBoardPanel = new BoardPanel(100,100);
+        this.add(userBoardPanel);
+        revalidate();
+        repaint();
+    }
+
+    public void addOpponentBoardPanel() throws IOException {
+        this.opponentBoardPanel = new BoardPanel(600,100);
+        this.add(opponentBoardPanel);
+        revalidate();
+        repaint();
     }
 }

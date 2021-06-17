@@ -67,7 +67,7 @@ public class UserGamePanel extends JPanel implements ActionListener {
         backBtn.setEnabled(true);
 
 
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(100,100);
         boardPanel.setEnabled(false);
 
         this.add(findingOpponentLbl);

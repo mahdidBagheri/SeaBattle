@@ -39,7 +39,7 @@ public class OpponentGamePanel extends JPanel {
         turnLbl.setText("00:00");
         turnLbl.setVisible(true);
 
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(100,100);
         boardPanel.setEnabled(false);
 
         this.add(turnLbl);
