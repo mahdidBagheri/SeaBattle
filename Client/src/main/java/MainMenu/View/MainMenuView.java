@@ -10,6 +10,7 @@ import MainMenu.Events.ScoreBoardEvent;
 import MainMenu.Events.ViewGameEvent;
 import MainMenu.Listener.NewGameListener;
 import MainMenu.Listener.ScoreBoardListener;
+import MainMenu.Listener.ViewAcountListener;
 import MainMenu.Listener.ViewGameListener;
 import ScoreBoard.View.ScoreBoardView;
 
@@ -31,6 +32,7 @@ public class MainMenuView extends JPanel implements ActionListener {
     NewGameListener newGameListener;
     ViewGameListener viewGameListener;
     ScoreBoardListener scoreBoardListener;
+    ViewAcountListener viewAcountListener;
 
     public MainMenuView(MainPanel mainPanel) throws IOException {
         this.mainPanel = mainPanel;
@@ -75,6 +77,7 @@ public class MainMenuView extends JPanel implements ActionListener {
         newGameListener = new NewGameListener(mainPanel);
         viewGameListener = new ViewGameListener(mainPanel);
         scoreBoardListener = new ScoreBoardListener(mainPanel);
+        viewAcountListener = new ViewAcountListener(mainPanel);
 
         this.add(newGameBtn);
         this.add(viewOtherGamesBtn);
@@ -126,7 +129,15 @@ public class MainMenuView extends JPanel implements ActionListener {
             }
         }
         else if(e.getSource() == viewAcountBtn){
-
+            try {
+                viewAcountListener.listen();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                couldNotConnectToServerException.printStackTrace();
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            }
         }
         else if(e.getSource() == logoutBtn){
 

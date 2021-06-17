@@ -7,6 +7,7 @@ import Connection.Server.ServerListener;
 import Connection.Server.ServerRequest;
 import LogIn.Exceptions.UsernameAndPasswordDoesNotMatch;
 import LogIn.LoginEvent.LoginEvent;
+import Utils.DateTime;
 import Utils.UserInfoHandler;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class LoginController {
         ServerRequest serverRequest = serverListener.listen();
 
         String session = serverRequest.getPayLoad().getStringStringHashMap().get("session");
-        UserInfoHandler.saveInfo(loginEvent.getUserName(),loginEvent.getPassword(),session);
+        UserInfoHandler.saveInfo(loginEvent.getUserName(),loginEvent.getPassword(),session );
     }
 
     public void validateLogin(LoginEvent loginEvent) throws IOException,

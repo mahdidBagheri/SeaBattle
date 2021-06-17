@@ -1,5 +1,6 @@
 package Connection.Client;
 
+import ServerAcountView.Listener.AcountViewListener;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Utils.ServerWaitForInput;
@@ -11,14 +12,12 @@ import ServerLogin.Listener.ServerLoginListener;
 import ServerScoreBoard.Listener.ServerScoreBoardListener;
 import ServerSignup.Listener.SignupListener;
 import ViewGame.Listener.ServerViewGameListener;
-import sun.reflect.generics.scope.Scope;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
 
 public class ClientThread extends Thread {
     private ServerConnection serverConnection;
@@ -58,6 +57,10 @@ public class ClientThread extends Thread {
                     //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerScoreBoardListener  serverScoreBoardListener = new ServerScoreBoardListener(serverConnection);
                     serverScoreBoardListener.listen(clientRequest);
+                }else if (clientRequest.getSource().equals("ViewAcount")) {
+                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                   AcountViewListener acountViewListener = new AcountViewListener(serverConnection);
+                    acountViewListener.listen(clientRequest);
                 }
 
                 int a = 0;

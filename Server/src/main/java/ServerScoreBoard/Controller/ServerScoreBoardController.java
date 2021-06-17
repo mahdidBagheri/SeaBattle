@@ -15,11 +15,12 @@ public class ServerScoreBoardController {
         ResultSet rs = connectionToDataBase.executeQuery(sql);
         if(rs != null){
             while (rs.next()){
-                String data = String.format("<html><body> Username: %s <br> Wins: %s <br> Lost: %s    <br> Score: %s </body></html>",
+                String data = String.format("<html><body> Username: %s <br> Wins: %s <br> Lost: %s <br> Score: %s <br> LastSeen: %s </body></html>",
                         rs.getString(2),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getString(10));
+                        rs.getString(10),
+                        rs.getString(6));
                 scoreBoardHash.put(Integer.toString(ctr),data);
                 ctr++;
             }

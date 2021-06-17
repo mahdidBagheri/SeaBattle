@@ -11,6 +11,7 @@ import MainMenu.View.MainMenuView;
 import ScoreBoard.View.ScoreBoardView;
 import Signup.Listener.SignupListener;
 import Signup.View.SignUpPanelView;
+import ViewAcount.View.ViewAcountView;
 import ViewGame.View.GameViewPanel;
 
 import javax.swing.*;
@@ -27,6 +28,7 @@ public class MainPanel extends JPanel {
     OpponentGamePanel opponentGamePanel;
     GameViewPanel gameViewPanel;
     ScoreBoardView scoreBoardView;
+    ViewAcountView viewAcountView;
 
     public MainPanel() throws IOException {
         this.setLayout(null);
@@ -94,6 +96,9 @@ public class MainPanel extends JPanel {
         }
         if(scoreBoardView != null){
             instance.remove(scoreBoardView);
+        }
+        if(viewAcountView != null){
+            instance.remove(viewAcountView);
         }
 
 
@@ -171,6 +176,17 @@ public class MainPanel extends JPanel {
         scoreBoardView.setMainPanel(instance);
         scoreBoardView.setVisible(true);
         instance.add(scoreBoardView);
+        instance.revalidate();
+        instance.repaint();
+    }
+
+    public void addViewAcountView(ViewAcountView viewAcountView) {
+        instance.clear();
+        this.viewAcountView = viewAcountView;
+
+        viewAcountView.setMainPanel(instance);
+        viewAcountView.setVisible(true);
+        instance.add(viewAcountView);
         instance.revalidate();
         instance.repaint();
     }

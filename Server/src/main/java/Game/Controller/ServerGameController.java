@@ -386,15 +386,15 @@ public class ServerGameController {
         ConnectionToDataBase connectionToDataBase = new ConnectionToDataBase();
         if(player1.isWinner()){
             player1.getUser().setWins(player1.getUser().getWins()+1);
-            player1.getUser().setScore(player1.getUser().getWins()+1);
+            player1.getUser().setScore(player1.getUser().getScore()+1);
             String sql1 = String.format("update \"UsersTable\" set \"Wins\" = '%s' and \"Score\" = '%s' where \"UserName\" = '%s';"
             ,Integer.toString(player1.getUser().getWins())
             ,Integer.toString(player1.getUser().getScore())
             ,player1.getUser().getUsername());
             connectionToDataBase.executeUpdate(sql1);
 
-            player2.getUser().setWins(player2.getUser().getWins()-1);
-            player2.getUser().setScore(player2.getUser().getWins()-1);
+            player2.getUser().setLoose(player2.getUser().getLoose()+1);
+            player2.getUser().setScore(player2.getUser().getScore()-1);
             String sql2 = String.format("update \"UsersTable\" set \"Wins\" = '%s' and \"Score\" = '%s' where \"UserName\" = '%s';"
                     ,Integer.toString(player2.getUser().getWins())
                     ,Integer.toString(player2.getUser().getScore())
@@ -404,8 +404,8 @@ public class ServerGameController {
 
         }
         else if(player2.isWinner()){
-            player1.getUser().setWins(player1.getUser().getWins()-1);
-            player1.getUser().setScore(player1.getUser().getWins()-1);
+            player1.getUser().setWins(player1.getUser().getLoose()+1);
+            player1.getUser().setScore(player1.getUser().getScore()-1);
             String sql1 = String.format("update \"UsersTable\" set \"Wins\" = '%s' , \"Score\" = '%s' where \"UserName\" = '%s';"
                     ,Integer.toString(player1.getUser().getWins())
                     ,Integer.toString(player1.getUser().getScore())
@@ -413,7 +413,7 @@ public class ServerGameController {
             connectionToDataBase.executeUpdate(sql1);
 
             player2.getUser().setWins(player2.getUser().getWins()+1);
-            player2.getUser().setScore(player2.getUser().getWins()+1);
+            player2.getUser().setScore(player2.getUser().getScore()+1);
             String sql2 = String.format("update \"UsersTable\" set \"Wins\" = '%s' , \"Score\" = '%s' where \"UserName\" = '%s';"
                     ,Integer.toString(player2.getUser().getWins())
                     ,Integer.toString(player2.getUser().getScore())
