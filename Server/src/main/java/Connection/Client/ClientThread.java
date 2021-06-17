@@ -8,8 +8,10 @@ import Game.Model.OnlineGames;
 import ServerLogin.Exceptions.IlligalLogin;
 import Game.Listener.ServerGameListener;
 import ServerLogin.Listener.ServerLoginListener;
+import ServerScoreBoard.Listener.ServerScoreBoardListener;
 import ServerSignup.Listener.SignupListener;
 import ViewGame.Listener.ServerViewGameListener;
+import sun.reflect.generics.scope.Scope;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -52,6 +54,10 @@ public class ClientThread extends Thread {
                     //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerViewGameListener serverViewGameListener = new ServerViewGameListener(serverConnection,onlineGames);
                     serverViewGameListener.listen(clientRequest);
+                }else if (clientRequest.getSource().equals("ScoreBoard")) {
+                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                    ServerScoreBoardListener  serverScoreBoardListener = new ServerScoreBoardListener(serverConnection);
+                    serverScoreBoardListener.listen(clientRequest);
                 }
 
                 int a = 0;

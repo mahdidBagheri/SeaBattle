@@ -6,9 +6,12 @@ import Connection.Exceptions.CouldNotConnectToServerException;
 import Interfaces.NextPanelListener;
 import MainFrame.View.MainPanel;
 import MainMenu.Events.NewGameEvent;
+import MainMenu.Events.ScoreBoardEvent;
 import MainMenu.Events.ViewGameEvent;
 import MainMenu.Listener.NewGameListener;
+import MainMenu.Listener.ScoreBoardListener;
 import MainMenu.Listener.ViewGameListener;
+import ScoreBoard.View.ScoreBoardView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +30,7 @@ public class MainMenuView extends JPanel implements ActionListener {
 
     NewGameListener newGameListener;
     ViewGameListener viewGameListener;
+    ScoreBoardListener scoreBoardListener;
 
     public MainMenuView(MainPanel mainPanel) throws IOException {
         this.mainPanel = mainPanel;
@@ -49,11 +53,6 @@ public class MainMenuView extends JPanel implements ActionListener {
         viewOtherGamesBtn.setBounds(350,150,250,50);
         viewOtherGamesBtn.addActionListener(this);
 
-        viewAcountBtn = new JButton("view Acounts");
-        viewAcountBtn.setText("view Acounts");
-        viewAcountBtn.setFocusable(false);
-        viewAcountBtn.setBounds(350,220,250,50);
-        viewAcountBtn.addActionListener(this);
 
         viewScoresBtn = new JButton("view scores");
         viewScoresBtn.setText("view scores");
@@ -61,14 +60,21 @@ public class MainMenuView extends JPanel implements ActionListener {
         viewScoresBtn.setBounds(350,220,250,50);
         viewScoresBtn.addActionListener(this);
 
+        viewAcountBtn = new JButton("view Acounts");
+        viewAcountBtn.setText("view Acounts");
+        viewAcountBtn.setFocusable(false);
+        viewAcountBtn.setBounds(350,300,250,50);
+        viewAcountBtn.addActionListener(this);
+
         logoutBtn = new JButton("logout");
         logoutBtn.setText("logout");
         logoutBtn.setFocusable(false);
-        logoutBtn.setBounds(350,300,250,50);
+        logoutBtn.setBounds(350,380,250,50);
         logoutBtn.addActionListener(this);
 
         newGameListener = new NewGameListener(mainPanel);
         viewGameListener = new ViewGameListener(mainPanel);
+        scoreBoardListener = new ScoreBoardListener(mainPanel);
 
         this.add(newGameBtn);
         this.add(viewOtherGamesBtn);
@@ -107,10 +113,19 @@ public class MainMenuView extends JPanel implements ActionListener {
                 classNotFoundException.printStackTrace();
             }
         }
-        else if(e.getSource() == viewAcountBtn){
-
-        }
         else if(e.getSource() == viewScoresBtn){
+            ScoreBoardEvent scoreBoardEvent = new ScoreBoardEvent();
+            try {
+                scoreBoardListener.listen(scoreBoardEvent);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                couldNotConnectToServerException.printStackTrace();
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            }
+        }
+        else if(e.getSource() == viewAcountBtn){
 
         }
         else if(e.getSource() == logoutBtn){

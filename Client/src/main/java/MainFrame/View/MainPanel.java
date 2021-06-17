@@ -8,6 +8,7 @@ import Interfaces.NextPanelListener;
 import LogIn.Listener.LoginListener;
 import LogIn.View.LoginPanelView;
 import MainMenu.View.MainMenuView;
+import ScoreBoard.View.ScoreBoardView;
 import Signup.Listener.SignupListener;
 import Signup.View.SignUpPanelView;
 import ViewGame.View.GameViewPanel;
@@ -25,6 +26,7 @@ public class MainPanel extends JPanel {
     UserGamePanel userGamePanel;
     OpponentGamePanel opponentGamePanel;
     GameViewPanel gameViewPanel;
+    ScoreBoardView scoreBoardView;
 
     public MainPanel() throws IOException {
         this.setLayout(null);
@@ -40,7 +42,7 @@ public class MainPanel extends JPanel {
         initialize();
     }
 
-    private void initialize() throws IOException {
+    public void initialize() throws IOException {
         signUpPanelView = new SignUpPanelView();
         signUpPanelView.setSignupListener(new SignupListener(this));
         this.add(signUpPanelView);
@@ -90,6 +92,10 @@ public class MainPanel extends JPanel {
         if(opponentGamePanel != null){
             instance.remove(opponentGamePanel);
         }
+        if(scoreBoardView != null){
+            instance.remove(scoreBoardView);
+        }
+
 
     }
 
@@ -154,6 +160,17 @@ public class MainPanel extends JPanel {
         gameViewPanel.setMainPanel(instance);
         gameViewPanel.setVisible(true);
         instance.add(gameViewPanel);
+        instance.revalidate();
+        instance.repaint();
+    }
+
+    public void addScoreBoardView(ScoreBoardView scoreBoardView) {
+        instance.clear();
+        this.scoreBoardView = scoreBoardView;
+
+        scoreBoardView.setMainPanel(instance);
+        scoreBoardView.setVisible(true);
+        instance.add(scoreBoardView);
         instance.revalidate();
         instance.repaint();
     }
