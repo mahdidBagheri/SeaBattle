@@ -1,5 +1,6 @@
 package Game.Controller;
 
+import Connection.DataCaseConnection.ConnectionToDataBase;
 import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerConnection;
 import Connection.Server.ServerPayLoad;
@@ -368,7 +369,7 @@ public class ServerGameController {
         }
     }
 
-    public void endGame() throws InterruptedException {
+    public void endGame() throws InterruptedException, SQLException {
         saveGame();
         synchronized (finishedNotifier){
             finishedNotifier.notifyAll();
@@ -378,6 +379,46 @@ public class ServerGameController {
         
     }
 
-    private void saveGame() {
+    private void saveGame() throws SQLException {
+        ConnectionToDataBase connectionToDataBase = new ConnectionToDataBase();
+        if(player1.isWinner()){
+            player1.getUser().setWins(player1.getUser().getWins()+1);
+            player1.getUser().setScore(player1.getUser().getWins()+1);
+            String sql1 = String.format("update \"UsersTable\" set \"Wins\" = '%s' and \"Score\" = '%s' where \"UserName\" = '%s';"
+            ,Integer.toString(player1.getUser().getWins())
+            ,Integer.toString(player1.getUser().getScore())
+            ,player1.getUser().getUsername());
+            connectionToDataBase.executeUpdate(sql1);
+
+            player2.getUser().setWins(player2.getUser().getWins()-1);
+            player2.getUser().setScore(player2.getUser().getWins()-1);
+            String sql2 = String.format("update \"UsersTable\" set \"Wins\" = '%s' and \"Score\" = '%s' where \"UserName\" = '%s';"
+                    ,Integer.toString(player2.getUser().getWins())
+                    ,Integer.toString(player2.getUser().getScore())
+                    ,player2.getUser().getUsername());
+            connectionToDataBase.executeUpdate(sql2);
+
+
+        }
+        else if(player2.isWinner()){
+            player1.getUser().setWins(player1.getUser().getWins()-1);
+            player1.getUser().setScore(player1.getUser().getWins()-1);
+            String sql1 = String.format("update \"UsersTable\" set \"Wins\" = '%s' , \"Score\" = '%s' where \"UserName\" = '%s';"
+                    ,Integer.toString(player1.getUser().getWins())
+                    ,Integer.toString(player1.getUser().getScore())
+                    ,player1.getUser().getUsername());
+            connectionToDataBase.executeUpdate(sql1);
+
+            player2.getUser().setWins(player2.getUser().getWins()+1);
+            player2.getUser().setScore(player2.getUser().getWins()+1);
+            String sql2 = String.format("update \"UsersTable\" set \"Wins\" = '%s' , \"Score\" = '%s' where \"UserName\" = '%s';"
+                    ,Integer.toString(player2.getUser().getWins())
+                    ,Integer.toString(player2.getUser().getScore())
+                    ,player2.getUser().getUsername());
+            connectionToDataBase.executeUpdate(sql2);
+
+
+        }
+        connectionToDataBase.Disconect();
     }
 }

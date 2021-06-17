@@ -10,6 +10,9 @@ public class User implements Serializable {
     String dateJoined;
     String lastSeen;
     String session;
+    int wins;
+    int loose;
+    int score;
 
     public String getUuid() {
         return uuid;
@@ -65,5 +68,29 @@ public class User implements Serializable {
 
     public void setSession(String session) {
         this.session = session;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLoose() {
+        return loose;
+    }
+
+    public void setLoose(int loose) {
+        this.loose = loose;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

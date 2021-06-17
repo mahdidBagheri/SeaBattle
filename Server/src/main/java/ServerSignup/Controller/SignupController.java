@@ -61,7 +61,7 @@ public class SignupController {
     public void signupUser(User user) throws SQLException {
         DateTime dateTime = new DateTime();
         String now = dateTime.Now();
-        String sql = String.format("insert into \"UsersTable\" (\"UserUUID\",\"UserName\",\"Password\",\"Email\",\"DateJoined\") values (uuid_generate_v4(),'%s','%s','%s','%s');",
+        String sql = String.format("insert into \"UsersTable\" (\"UserUUID\",\"UserName\",\"Password\",\"Email\",\"DateJoined\",\"Wins\",\"Loose\",\"Score\") values (uuid_generate_v4(),'%s','%s','%s','%s','0','0','0');",
                 user.getUsername(),
                 user.getPassword(),
                 user.getPassword(),

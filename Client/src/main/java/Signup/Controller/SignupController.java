@@ -44,13 +44,16 @@ public class SignupController {
         if(isEmailExists){
             throw new EmailExistException("Email Exists");
         }
+        clientConnection.getSocket().close();
+
+        ClientConnection clientConnection2 = new ClientConnection();
 
         payLoad = new ClientPayLoad();
         payLoad.getStringStringHashMap().put("username",signupEvent.getUserName());
         payLoad.getStringStringHashMap().put("password",signupEvent.getPassword1());
         payLoad.getStringStringHashMap().put("email",signupEvent.getEmail());
         clientRequest = new ClientRequest("signup",payLoad,null,"validate email",null,null);
-        boolean isUsernameExists = clientConnection.executeBoolean(clientRequest);
+        boolean isUsernameExists = clientConnection2.executeBoolean(clientRequest);
         if(isUsernameExists){
             throw new UsernameExistsException("Username Exists");
         }

@@ -27,6 +27,9 @@ public class UserController {
                 user.setDateJoined(rs.getString(5));
                 user.setLastSeen(rs.getString(6));
                 user.setSession(rs.getString(7));
+                user.setWins(Integer.parseInt(rs.getString(8)));
+                user.setLoose(Integer.parseInt(rs.getString(9)));
+                user.setScore(Integer.parseInt(rs.getString(10)));
             }
         }
     }
@@ -45,6 +48,9 @@ public class UserController {
                 user.setDateJoined(rs.getString(5));
                 user.setLastSeen(rs.getString(6));
                 user.setSession(rs.getString(7));
+                user.setWins(Integer.parseInt(rs.getString(8)));
+                user.setLoose(Integer.parseInt(rs.getString(9)));
+                user.setScore(Integer.parseInt(rs.getString(10)));
             }
         }
     }

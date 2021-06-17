@@ -5,6 +5,7 @@ import Game.Controller.BoardController;
 import Game.Controller.ServerGameController;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ServerGameThread extends Thread {
     ServerGameController serverGameController;
@@ -24,11 +25,13 @@ public class ServerGameThread extends Thread {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
 
-    private void startTimer() throws InterruptedException, IOException, CouldNotConnectToServerException, ClassNotFoundException {
+    private void startTimer() throws InterruptedException, IOException, CouldNotConnectToServerException, ClassNotFoundException, SQLException {
         while (!serverGameController.isFinished()) {
             int checkConnection = 0;
             while (serverGameController.getTimeLeft() > 0) {
