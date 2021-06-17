@@ -10,6 +10,7 @@ import LogIn.View.LoginPanelView;
 import MainMenu.View.MainMenuView;
 import Signup.Listener.SignupListener;
 import Signup.View.SignUpPanelView;
+import ViewGame.View.GameViewPanel;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class MainPanel extends JPanel {
     MainMenuView mainMenuView;
     UserGamePanel userGamePanel;
     OpponentGamePanel opponentGamePanel;
+    GameViewPanel gameViewPanel;
 
     public MainPanel() throws IOException {
         this.setLayout(null);
@@ -135,11 +137,23 @@ public class MainPanel extends JPanel {
     }
 
     public void addOpponentGamePanel(OpponentGamePanel opponentGamePanel) {
+
         this.opponentGamePanel = opponentGamePanel;
 
         opponentGamePanel.setMainPanel(instance);
         opponentGamePanel.setVisible(false);
         instance.add(opponentGamePanel);
+        instance.revalidate();
+        instance.repaint();
+    }
+
+    public void addViewGame(GameViewPanel gameViewPanel) {
+        instance.clear();
+        this.gameViewPanel = gameViewPanel;
+
+        gameViewPanel.setMainPanel(instance);
+        gameViewPanel.setVisible(true);
+        instance.add(gameViewPanel);
         instance.revalidate();
         instance.repaint();
     }

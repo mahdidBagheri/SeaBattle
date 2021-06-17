@@ -2,10 +2,13 @@ package MainMenu.View;
 
 import Config.ColorConfig.ColorConfig;
 import Config.FrameConfig.FrameConfig;
+import Connection.Exceptions.CouldNotConnectToServerException;
 import Interfaces.NextPanelListener;
 import MainFrame.View.MainPanel;
 import MainMenu.Events.NewGameEvent;
+import MainMenu.Events.ViewGameEvent;
 import MainMenu.Listener.NewGameListener;
+import MainMenu.Listener.ViewGameListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -23,6 +26,7 @@ public class MainMenuView extends JPanel implements ActionListener {
     JButton logoutBtn;
 
     NewGameListener newGameListener;
+    ViewGameListener viewGameListener;
 
     public MainMenuView(MainPanel mainPanel) throws IOException {
         this.mainPanel = mainPanel;
@@ -64,6 +68,7 @@ public class MainMenuView extends JPanel implements ActionListener {
         logoutBtn.addActionListener(this);
 
         newGameListener = new NewGameListener(mainPanel);
+        viewGameListener = new ViewGameListener(mainPanel);
 
         this.add(newGameBtn);
         this.add(viewOtherGamesBtn);
@@ -91,7 +96,16 @@ public class MainMenuView extends JPanel implements ActionListener {
             }
         }
         else if(e.getSource() == viewOtherGamesBtn){
-
+            ViewGameEvent viewGameEvent = new ViewGameEvent();
+            try {
+                viewGameListener.listen(viewGameEvent);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                couldNotConnectToServerException.printStackTrace();
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            }
         }
         else if(e.getSource() == viewAcountBtn){
 

@@ -1,8 +1,11 @@
 package MainMenu.Listener;
 
+import Config.NetWorkConfig.NetworkConfig;
 import Connection.Client.ClientConnection;
 import Connection.Client.ClientPayLoad;
 import Connection.Client.ClientRequest;
+import Connection.Exceptions.CouldNotConnectToServerException;
+import Connection.Utils.ClientWaitForInput;
 import Game.Controller.GameController;
 import Game.Listener.UserGamePanelListener;
 import Game.Threads.GameThreadServerListener;
@@ -10,6 +13,7 @@ import Game.View.OpponentGamePanel;
 import Game.View.UserGamePanel;
 import MainFrame.View.MainPanel;
 import MainMenu.Events.NewGameEvent;
+import MainMenu.Events.ViewGameEvent;
 import Utils.UserInfoHandler;
 
 import java.io.IOException;
@@ -55,5 +59,7 @@ public class NewGameListener {
         mainPanel.addOpponentGamePanel(opponentGamePanel);
 
     }
+
+
 
 }

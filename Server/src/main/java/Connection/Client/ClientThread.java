@@ -9,6 +9,7 @@ import ServerLogin.Exceptions.IlligalLogin;
 import Game.Listener.ServerGameListener;
 import ServerLogin.Listener.ServerLoginListener;
 import ServerSignup.Listener.SignupListener;
+import ViewGame.Listener.ServerViewGameListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,6 +48,10 @@ public class ClientThread extends Thread {
                     checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection, onlineGames);
                     serverNewGameListener.listen(clientRequest);
+                } else if (clientRequest.getSource().equals("viewGame")) {
+                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                    ServerViewGameListener serverViewGameListener = new ServerViewGameListener(serverConnection,onlineGames);
+                    serverViewGameListener.listen();
                 }
 
                 int a = 0;
