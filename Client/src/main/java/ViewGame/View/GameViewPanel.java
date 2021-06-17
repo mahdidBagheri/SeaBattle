@@ -99,17 +99,19 @@ public class GameViewPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void addUserBoardPanel() throws IOException {
+    public BoardPanel addUserBoardPanel() throws IOException {
         this.userBoardPanel = new BoardPanel(100,100);
         this.add(userBoardPanel);
         revalidate();
         repaint();
+        return userBoardPanel;
     }
 
-    public void addOpponentBoardPanel() throws IOException {
+    public BoardPanel addOpponentBoardPanel() throws IOException {
         this.opponentBoardPanel = new BoardPanel(600,100);
         this.add(opponentBoardPanel);
         revalidate();
         repaint();
+        return opponentBoardPanel;
     }
 }

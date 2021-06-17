@@ -22,7 +22,7 @@ public class GameViewServerListener extends Thread {
                 ClientWaitForInput.waitForInput(gameViewController.getClientConnection().getSocket());
                 ObjectInputStream objectInputStream = new ObjectInputStream(gameViewController.getClientConnection().getSocket().getInputStream());
                 ServerRequest serverRequest = (ServerRequest) objectInputStream.readObject();
-                gameViewController.applyGameData(serverRequest);
+                gameViewController.applyGameData(serverRequest.getPayLoad().getGameData());
             }
         } catch (IOException e) {
             e.printStackTrace();
