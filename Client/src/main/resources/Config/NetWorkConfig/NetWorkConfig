@@ -1,3 +1,3 @@
 serverIP=localhost
-port=9011
+port=8001
 sessionAddress=..\\SeaBattle\\Client\\src\\main\\resources\\Config\\NetWorkConfig\\Session

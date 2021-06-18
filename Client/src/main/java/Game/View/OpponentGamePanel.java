@@ -20,6 +20,7 @@ public class OpponentGamePanel extends JPanel {
     MainPanel mainPanel;
 
     JLabel turnLbl;
+    JLabel opponentUserNameLbl;
 
     BoardPanel boardPanel;
 
@@ -36,14 +37,21 @@ public class OpponentGamePanel extends JPanel {
 
         turnLbl = new JLabel();
         turnLbl.setBounds(250,20,150,20);
-        turnLbl.setText("00:00");
+        turnLbl.setText("");
         turnLbl.setVisible(true);
+
+        opponentUserNameLbl = new JLabel();
+        opponentUserNameLbl.setBounds(100,20,150,20);
+        opponentUserNameLbl.setText("");
+        opponentUserNameLbl.setVisible(true);
+
 
         boardPanel = new BoardPanel(100,100);
         boardPanel.setEnabled(false);
 
         this.add(turnLbl);
         this.add(boardPanel);
+        this.add(opponentUserNameLbl);
 
 
 
@@ -64,6 +72,14 @@ public class OpponentGamePanel extends JPanel {
 
     public BoardPanel getBoardPanel() {
         return boardPanel;
+    }
+
+    public JLabel getOpponentUserNameLbl() {
+        return opponentUserNameLbl;
+    }
+
+    public void setOpponentUserNameLbl(JLabel opponentUserNameLbl) {
+        this.opponentUserNameLbl = opponentUserNameLbl;
     }
 
     public void setOpponentGamePanelListener(OpponentGamePanelListener opponentGamePanelListener) {

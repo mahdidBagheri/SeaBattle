@@ -4,6 +4,7 @@ import Connection.Exceptions.CouldNotConnectToServerException;
 import Connection.Server.ServerRequest;
 import Connection.Utils.ClientWaitForInput;
 import Game.Controller.GameController;
+import Utils.UserInfoHandler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,8 +29,12 @@ public class GameThreadServerListener extends Thread {
                     gameController.AnswerCheckConnectionFromServer();
                 }
                 else if(serverRequest.getCommand().equals("FirstGameData")){
+                    String selfUserName = UserInfoHandler.loadInfo().get("username");
+                    String username1 = serverRequest.getPayLoad().getGameData().getUser1().getUsername();
+                    String username2 = serverRequest.getPayLoad().getGameData().getUser2().getUsername();
+
                     gameController.applyGameData(serverRequest.getPayLoad().getGameData());
-                    gameController.opponentFound();
+                    gameController.opponentFound(selfUserName.equals(username1)?username1:username2);
                     gameController.timer(serverRequest.getPayLoad().getGameData().getTimeLeft());
 
                 }

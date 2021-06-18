@@ -1,5 +1,6 @@
 package Connection.Client;
 
+import Config.NetWorkConfig.NetworkConfig;
 import Connection.Server.ServerRequest;
 import Connection.Utils.ClientWaitForInput;
 import Connection.Exceptions.CouldNotConnectToServerException;
@@ -11,8 +12,19 @@ import java.net.Socket;
 public class ClientConnection {
     Socket socket;
 
-    public ClientConnection() throws IOException {
-        this.socket = new Socket("localhost", Constants.portNumber);
+    public ClientConnection() {
+        try {
+            this.socket = new Socket("localhost", Constants.portNumber);
+        } catch (IOException e) {
+
+            try {
+                NetworkConfig networkConfig = new NetworkConfig();
+
+                this.socket = new Socket("localhost", networkConfig.getPort());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
         System.out.println(socket);
     }
 

@@ -65,7 +65,6 @@ public class GameController {
     public void applyGameData(GameData gameData) throws IOException {
         printBoard(gameData.getBoard1());
 
-        //TODO change this part !
         this.board = gameData.getBoard1();
         this.opponentBoard = gameData.getBoard2();
         retriveBoard();
@@ -82,7 +81,7 @@ public class GameController {
         System.out.println("\n");
     }
 
-    public void opponentFound() {
+    public void opponentFound(String opponentUserName) {
         userGamePanel.getFindingOpponentLbl().setText("Opponent found!");
         userGamePanel.getReadyBtn().setEnabled(true);
         userGamePanel.getBoardPanel().setEnabled(true);
@@ -90,6 +89,7 @@ public class GameController {
         opponentGamePanel.setVisible(true);
         timer.start();
         opponentGamePanel.getBoardPanel().setEnabled(true);
+        opponentGamePanel.getOpponentUserNameLbl().setText(opponentUserName);
         userGamePanel.repaint();
         opponentGamePanel.repaint();
     }
@@ -103,7 +103,6 @@ public class GameController {
             ClientPayLoad clientPayLoad = new ClientPayLoad();
             clientPayLoad.getStringStringHashMap().put("X", Integer.toString(X));
             clientPayLoad.getStringStringHashMap().put("Y", Integer.toString(Y));
-            //TODO complete this
             ClientRequest clientRequest = new ClientRequest("Game", clientPayLoad, null, "hit", null, null);
             clientConnection.execute(clientRequest);
         } else if (opponentBoard.getBoard()[Y][X].charAt(0) == '-') {

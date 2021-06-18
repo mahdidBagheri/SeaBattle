@@ -27,7 +27,7 @@ public class ViewAcountListener {
 
         ClientConnection clientConnection = new ClientConnection();
 
-        ClientRequest clientRequest = new ClientRequest("ViewAcount",null,userInfo.get("session"),"ViewAcount",userInfo.get("username"),userInfo.get("session"));
+        ClientRequest clientRequest = new ClientRequest("ViewAcount",null,userInfo.get("session"),"ViewAcount",userInfo.get("username"),userInfo.get("password"));
 
         clientConnection.execute(clientRequest);
 

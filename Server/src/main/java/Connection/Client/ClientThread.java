@@ -50,15 +50,15 @@ public class ClientThread extends Thread {
                     ServerGameListener serverNewGameListener = new ServerGameListener(serverConnection, onlineGames);
                     serverNewGameListener.listen(clientRequest);
                 } else if (clientRequest.getSource().equals("viewGame")) {
-                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                    checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerViewGameListener serverViewGameListener = new ServerViewGameListener(serverConnection,onlineGames);
                     serverViewGameListener.listen(clientRequest);
                 }else if (clientRequest.getSource().equals("ScoreBoard")) {
-                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                    checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                     ServerScoreBoardListener  serverScoreBoardListener = new ServerScoreBoardListener(serverConnection);
                     serverScoreBoardListener.listen(clientRequest);
                 }else if (clientRequest.getSource().equals("ViewAcount")) {
-                    //checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
+                    checkSession(clientRequest.getUsername(), clientRequest.getPassword(), clientRequest.getSession());
                    AcountViewListener acountViewListener = new AcountViewListener(serverConnection);
                     acountViewListener.listen(clientRequest);
                 }

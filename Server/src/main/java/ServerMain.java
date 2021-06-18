@@ -1,12 +1,11 @@
+import Config.NetworkConfig.ServerNetworkConfig;
 import Connection.Client.ClientThread;
-import Game.Controller.ServerGameController;
 import Game.Model.OnlineGames;
 import Interfaces.Constants;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
 
 public class ServerMain {
     public static void main(String[] args) {
@@ -16,7 +15,13 @@ public class ServerMain {
         try {
             serverSocket = new ServerSocket(Constants.portNumber);
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                ServerNetworkConfig networkConfig = new ServerNetworkConfig();
+                serverSocket = new ServerSocket(networkConfig.getPort());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
         }
 
         while (true) {

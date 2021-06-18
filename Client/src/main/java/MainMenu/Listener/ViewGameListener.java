@@ -29,7 +29,7 @@ public class ViewGameListener {
 
         ClientConnection clientConnection = new ClientConnection();
 
-        ClientRequest clientRequest = new ClientRequest("viewGame",null,userInfo.get("session"),"onlineGames",userInfo.get("username"),userInfo.get("session"));
+        ClientRequest clientRequest = new ClientRequest("viewGame",null,userInfo.get("session"),"onlineGames",userInfo.get("username"),userInfo.get("password"));
 
         clientConnection.execute(clientRequest);
 

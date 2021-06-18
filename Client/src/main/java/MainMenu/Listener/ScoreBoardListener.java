@@ -27,7 +27,7 @@ public class ScoreBoardListener {
 
         ClientConnection clientConnection = new ClientConnection();
 
-        ClientRequest clientRequest = new ClientRequest("ScoreBoard",null,userInfo.get("session"),"ScoreBoard",userInfo.get("username"),userInfo.get("session"));
+        ClientRequest clientRequest = new ClientRequest("ScoreBoard",null,userInfo.get("session"),"ScoreBoard",userInfo.get("username"),userInfo.get("password"));
 
         clientConnection.execute(clientRequest);
 
