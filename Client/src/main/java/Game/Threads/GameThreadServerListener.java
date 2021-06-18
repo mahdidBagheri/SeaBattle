@@ -74,6 +74,7 @@ public class GameThreadServerListener extends Thread {
             } catch (CouldNotConnectToServerException e) {
 
             } catch (IOException e) {
+                System.out.println("back");
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

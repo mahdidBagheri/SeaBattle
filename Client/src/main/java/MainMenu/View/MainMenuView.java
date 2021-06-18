@@ -140,7 +140,11 @@ public class MainMenuView extends JPanel implements ActionListener {
             }
         }
         else if(e.getSource() == logoutBtn){
-
+            try {
+                mainPanel.addLoginSignupView();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
 }

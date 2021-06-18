@@ -103,6 +103,9 @@ public class MainPanel extends JPanel {
         if(viewAcountView != null){
             instance.remove(viewAcountView);
         }
+        if(mainMenuView != null){
+            instance.remove(mainMenuView);
+        }
 
 
     }
@@ -192,5 +195,11 @@ public class MainPanel extends JPanel {
         instance.add(viewAcountView);
         instance.revalidate();
         instance.repaint();
+    }
+
+    public void addLoginSignupView() throws IOException {
+        instance.clear();
+        initialize();
+        repaint();
     }
 }

@@ -40,9 +40,9 @@ public class SignupController {
         payLoad.getStringStringHashMap().put("password",signupEvent.getPassword1());
         payLoad.getStringStringHashMap().put("email",signupEvent.getEmail());
         ClientRequest clientRequest = new ClientRequest("signup",payLoad,null,"validate username",null,null);
-        boolean isEmailExists = clientConnection.executeBoolean(clientRequest);
-        if(isEmailExists){
-            throw new EmailExistException("Email Exists");
+        boolean isUsernameExists = clientConnection.executeBoolean(clientRequest);
+        if(isUsernameExists){
+            throw new UsernameExistsException("Username Exists");
         }
         clientConnection.getSocket().close();
 
@@ -53,9 +53,9 @@ public class SignupController {
         payLoad.getStringStringHashMap().put("password",signupEvent.getPassword1());
         payLoad.getStringStringHashMap().put("email",signupEvent.getEmail());
         clientRequest = new ClientRequest("signup",payLoad,null,"validate email",null,null);
-        boolean isUsernameExists = clientConnection2.executeBoolean(clientRequest);
-        if(isUsernameExists){
-            throw new UsernameExistsException("Username Exists");
+        boolean isEmailExists = clientConnection2.executeBoolean(clientRequest);
+        if(isEmailExists){
+            throw new EmailExistException("Email Exists");
         }
 
     }

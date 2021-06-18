@@ -117,21 +117,32 @@ public class SignUpPanelView extends JPanel implements ActionListener {
                         emailText.getText());
 
                 signupListener.listen(signupEvent);
+                userNameText.setText("");
+                password1Text.setText("");
+                password2Text.setText("");
+                emailText.setText("");
+                JOptionPane.showMessageDialog(this,"successfully signed in");
             } catch (PasswordsNotMatchException passwordsNotMatchException) {
+                JOptionPane.showMessageDialog(this,"passwords does not match");
                 passwordsNotMatchException.printStackTrace();
             } catch (UserNameStartsWithDigitException userNameStartsWithDigitException) {
+                JOptionPane.showMessageDialog(this,"userName Starts With Digit");
                 userNameStartsWithDigitException.printStackTrace();
             } catch (UsernameExistsException usernameExistsException) {
+                JOptionPane.showMessageDialog(this,usernameExistsException.getMessage());
                 usernameExistsException.printStackTrace();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             } catch (EmailExistException emailExistException) {
+                JOptionPane.showMessageDialog(this,emailExistException.getMessage());
                 emailExistException.printStackTrace();
             } catch (ClassNotFoundException classNotFoundException) {
                 classNotFoundException.printStackTrace();
             } catch (CouldNotConnectToServerException couldNotConnectToServerException) {
+                JOptionPane.showMessageDialog(this,"could Not Connect To Server");
                 couldNotConnectToServerException.printStackTrace();
             } catch (EmptyFieldException emptyFieldException) {
+                JOptionPane.showMessageDialog(this,"empty Field");
                 emptyFieldException.printStackTrace();
             }
         }
