@@ -296,7 +296,7 @@ public class ServerGameController {
             player2.setWinner(true);
         }
         else {
-            player2.setWinner(false);
+            player1.setWinner(true);
         }
         return true;
     }

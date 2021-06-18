@@ -82,6 +82,9 @@ public class MainPanel extends JPanel {
         if(loginPanelView != null){
             instance.remove(loginPanelView);
         }
+        if(gameViewPanel != null){
+            instance.remove(gameViewPanel);
+        }
         if(signUpPanelView != null){
             instance.remove(signUpPanelView);
         }

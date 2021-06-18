@@ -25,6 +25,7 @@ public class GameViewPanel extends JPanel implements ActionListener {
 
     JComboBox<String> onlineGamesCombo;
     JButton viewGame;
+    JButton backBtn;
 
     ViewGameBoardListener viewGameBoardListener;
 
@@ -53,14 +54,23 @@ public class GameViewPanel extends JPanel implements ActionListener {
         viewGame = new JButton("viewGame");
         viewGame.setText("viewGame");
         viewGame.setFocusable(false);
-        viewGame.setBounds(15,475,100,50);
+        viewGame.setBounds(270,10,100,50);
         viewGame.addActionListener(this);
         viewGame.setEnabled(true);
+
+        backBtn = new JButton("back");
+        backBtn.setText("back");
+        backBtn.setFocusable(false);
+        backBtn.setBounds(10,475,100,50);
+        backBtn.addActionListener(this);
+        backBtn.setEnabled(true);
+
 
         viewGameBoardListener = new ViewGameBoardListener(this);
 
         this.add(onlineGamesCombo);
         this.add(viewGame);
+        this.add(backBtn);
 
         gameViewPanel = this;
 
@@ -85,6 +95,13 @@ public class GameViewPanel extends JPanel implements ActionListener {
             try {
                 viewGameBoardListener.listen(gameUUID);
             } catch (IOException | CouldNotConnectToServerException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+        else if(e.getSource() == backBtn){
+            try {
+                mainPanel.addMainMenu();
+            } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         }
